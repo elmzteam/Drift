@@ -100,11 +100,18 @@ public class LoginConnectActivity extends Activity
 							onLogin();
 						} else {
 							Log.d(getString(R.string.log_tag), "Login rejected");
-
 							loginStatus.setText("Invalid username or password.");
+
+							inpUsername.setEnabled(true);
+							inpPassword.setEnabled(true);
+							btnLoginSubmit.setEnabled(true);
+							btnLoginSubmit.setVisibility(View.VISIBLE);
+							loginSpinner.setVisibility(View.GONE);
 						}
 					}
 				});
+				arf.execute("POST", "authUser", username, password);
+
 			}
 		});
 
