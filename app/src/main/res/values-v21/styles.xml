@@ -7,7 +7,7 @@
 		<item name="android:colorAccent">@color/accent</item>
 	</style>
 
-	<style name="NoAppBarTheme" parent="android:Theme.Material.NoActionBar" />
+	<style name="NoAppBarTheme" parent="android:Theme.Material.NoActionBar"/>
 
 	<style name="text_display4">
 		<item name="android:textSize">@dimen/display4_height</item>
@@ -50,7 +50,7 @@
 		<item name="android:textSize">@dimen/body_height</item>
 		<item name="android:textColor">@color/text_primary</item>
 		<item name="android:fontFamily">sans-serif-regular</item>
-</style>
+	</style>
 
 	<style name="text_hint">
 		<item name="android:textSize">@dimen/caption_height</item>
@@ -87,5 +87,13 @@
 	<style name="text_secondary">
 		<item name="android:textSize">@dimen/body_height</item>
 		<item name="android:textColor">@color/text_secondary</item>
+	</style>
+
+	<style name="vertical_divider">
+		<item name="android:layout_width">1dp</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:background">@color/divider</item>
+		<item name="android:layout_marginStart">@dimen/divider_margin</item>
+		<item name="android:layout_marginEnd">@dimen/divider_margin</item>
 	</style>
 </resources>

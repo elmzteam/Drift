@@ -65,19 +65,29 @@ public class LoginConnectActivity extends Activity{
 				APIRequestFragment arf = new APIRequestFragment(new ICallback(){
 					@Override
 					public void callback(JsonElement tok){
-						String token = tok.getAsString();
-						if(token.length() > 0){
-							Log.d(getString(R.string.log_tag), "Login accepted");
+						try{
+							String token = tok.getAsString();
+							if(token.length() > 0){
+								Log.d(getString(R.string.log_tag), "Login accepted");
 
-							SharedPreferences.Editor editor = sp.edit();
-							editor.putString("authToken", token);
-							editor.putString("username", username);
-							editor.commit();
-							onLogin();
-						} else {
-							Log.d(getString(R.string.log_tag), "Login rejected");
+								SharedPreferences.Editor editor = sp.edit();
+								editor.putString("authToken", token);
+								editor.putString("username", username);
+								editor.commit();
+								onLogin();
+							} else {
+								Log.d(getString(R.string.log_tag), "Login rejected");
 
-							loginStatus.setText("Invalid username or password.");
+								loginStatus.setText("Invalid username or password.");
+
+								inpUsername.setEnabled(true);
+								inpPassword.setEnabled(true);
+								btnLoginSubmit.setEnabled(true);
+								btnLoginSubmit.setVisibility(View.VISIBLE);
+								loginSpinner.setVisibility(View.GONE);
+							}
+						} catch(UnsupportedOperationException e){
+							loginStatus.setText("Unable to communicate with server.");
 
 							inpUsername.setEnabled(true);
 							inpPassword.setEnabled(true);
