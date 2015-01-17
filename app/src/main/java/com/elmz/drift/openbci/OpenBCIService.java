@@ -9,6 +9,7 @@ import android.hardware.usb.UsbManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,29 +26,19 @@ import java.util.Arrays;
 public class OpenBCIService extends Service
 {
 	public static final String TAG = "OpenBCI Service";
-	static final int MAX_READ_LENGTH = 512;
-	static final int PACKET_LENGTH = 33;
-	static D2xxManager sManager = null;
-	ReadThread mReadThread;
-	FT_Device mDevice = null;
-	boolean streaming;
-	byte[] overflowBuffer = new byte[MAX_READ_LENGTH*2];
-	int overflowLength = 0;
-
-	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			switch (intent.getAction()) {
-				case UsbManager.ACTION_USB_ACCESSORY_ATTACHED:
-					connectDevice();
-					break;
-				case UsbManager.ACTION_USB_DEVICE_DETACHED:
-					Log.d(TAG, "Device detached");
-					disconnectDevice();
-					break;
-			}
-		}
-	};
+	private static final int MAX_READ_LENGTH = 512;
+	private static final int PACKET_LENGTH = 33;
+	private final float mVref = 4.5f;
+	private final double mAccelScale = 0.002d / Math.pow(2,4);
+	private double mGain = 24d;
+	private double mVoltScale = mVref / (Math.pow(2,23)-1) / mGain * 1000000;
+	private static D2xxManager sManager = null;
+	private ReadThread mReadThread;
+	private FT_Device mDevice = null;
+	private boolean streaming;
+	private byte[] overflowBuffer = new byte[MAX_READ_LENGTH*2];
+	private int overflowLength = 0;
+	private Messenger mMessenger;
 
 	final Handler INIT_HANDLER = new Handler() {
 		@Override
@@ -56,6 +47,15 @@ public class OpenBCIService extends Service
 			final char[] decoded = Arrays.copyOf(Charset.forName("US-ASCII").decode(ByteBuffer.wrap(input)).array(), msg.arg1);
 			if (decoded.length > 4 && decoded[decoded.length - 3] == '$' && decoded[decoded.length - 2] == '$' && decoded[decoded.length-1] == '$') {
 				Log.d(TAG, "EOT received");
+				// Notify the LoginActivity that OpenBCI is initialized
+				Message notif = Message.obtain();
+				msg.arg1=1;
+				try {
+					mMessenger.send(notif);
+				} catch (android.os.RemoteException e1) {
+					Log.w(getClass().getName(), "Exception sending message", e1);
+				}
+
 				new Handler().postDelayed(new Runnable() {
 					@Override
 					public void run() {
@@ -94,10 +94,10 @@ public class OpenBCIService extends Service
 					temp.sampleIndex = (int) overflowBuffer[index + 1];
 					for (int j = index + 2; j < index + 26; j += 3) {
 						temp.values[(j - index - 2) / 3] = interpret24bitAsInt32(overflowBuffer[j],
-								overflowBuffer[j + 1], overflowBuffer[j + 2]);
+								overflowBuffer[j + 1], overflowBuffer[j + 2]) * mVoltScale;
 					}
-					for (int j = index + 26; j < index + PACKET_LENGTH; j += 2) {
-						temp.values[(j - index - 26) / 2] = interpret16bitAsInt32(overflowBuffer[j], overflowBuffer[j + 1]);
+					for (int j = index + 26; j < index + PACKET_LENGTH - 1; j += 2) {
+						temp.auxValues[(j - index - 26) / 2] = interpret16bitAsInt32(overflowBuffer[j], overflowBuffer[j + 1]) * mAccelScale;
 					}
 					temp.printToConsole();
 //					mStreamReader.addFrame(temp.values[0]);
@@ -169,6 +169,9 @@ public class OpenBCIService extends Service
 		if(!sManager.setVIDPID(0x0403, 0xada1)) {
 			Log.d(TAG, "setVIDPID Error");
 		}
+		if (intent.getExtras() != null) {
+			mMessenger = (Messenger) intent.getExtras().get(TAG);
+		}
 
 		// If we get killed, after returning from here, restart
 		return START_STICKY;
@@ -184,7 +187,6 @@ public class OpenBCIService extends Service
 		super.onDestroy();
 		writeToDevice(OpenBCICommands.STOP_STREAM);
 		disconnectDevice();
-		unregisterReceiver(mUsbReceiver);
 		Log.d(TAG, "Stopping OpenBCI service");
 	}
 
