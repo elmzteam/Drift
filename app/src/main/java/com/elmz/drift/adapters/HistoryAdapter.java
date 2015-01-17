@@ -9,6 +9,9 @@ import android.widget.TextView;
 import com.elmz.drift.R;
 import com.elmz.drift.items.Drive;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 	private Drive[] data;
 	private String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
@@ -22,9 +25,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 		public ViewHolder(View v) {
 			super(v);
 			monthText = (TextView) v.findViewById(R.id.history_item_month);
-			dateText = (TextView) v.findViewById(R.id.history_item_month);
-			titleText = (TextView) v.findViewById(R.id.history_item_month);
-			subtitleText = (TextView) v.findViewById(R.id.history_item_month);
+			dateText = (TextView) v.findViewById(R.id.history_item_date);
+			titleText = (TextView) v.findViewById(R.id.history_item_title);
+			subtitleText = (TextView) v.findViewById(R.id.history_item_subtitle);
 		}
 	}
 
@@ -41,10 +44,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int ind) {
-		holder.monthText.setText(months[data[ind].start.getMonth()]);
-		holder.dateText.setText(Integer.toString(data[ind].start.getDate()));
-		holder.titleText.setText(data[ind].from + " to " + data[ind].to);
-		holder.subtitleText.setText(data[ind].start.toString() + " - " + data[ind].end.toString());
+		holder.monthText.setText(months[data[ind].getStart().getMonth()]);
+		holder.dateText.setText(Integer.toString(data[ind].getStart().getDate()));
+		DateFormat df = new SimpleDateFormat("MMM d, h:mm a");
+		holder.titleText.setText(data[ind].getFrom() + " to " + data[ind].getTo());
+		holder.subtitleText.setText(df.format(data[ind].getStart()) + " - " + df.format(data[ind].getEnd()));
 	}
 
 	@Override

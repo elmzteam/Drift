@@ -47,6 +47,11 @@
 		<item name="android:textColor">@color/text_disabled</item>
 	</style>
 
+	<style name="text_display3">
+		<item name="android:textSize">@dimen/display3_height</item>
+		<item name="android:textColor">@color/text_primary</item>
+	</style>
+
 	<style name="text_disabled">
 		<item name="android:textSize">@dimen/body_height</item>
 		<item name="android:textColor">@color/text_disabled</item>
@@ -54,5 +59,10 @@
 
 	<style name="input_single_line">
 		<item name="android:maxLines">1</item>
+	</style>
+
+	<style name="text_secondary">
+		<item name="android:textSize">@dimen/body_height</item>
+		<item name="android:textColor">@color/text_secondary</item>
 	</style>
 </resources>

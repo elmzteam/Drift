@@ -1,14 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 								android:layout_width="match_parent"
 								android:layout_height="match_parent"
 								android:background="@color/black">
 
 	<TextView
-		android:layout_width="wrap_content"
+		android:layout_width="0dp"
+		android:layout_weight="1"
 		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
-		android:text="DRIFT"
-		style="@style/text_title"
-		android:textColor="@color/white"/>
-</RelativeLayout>
+		android:text="D"
+		style="@style/text_display3"
+		android:textColor="@color/white"
+		android:layout_gravity="center"
+		android:gravity="center"/>
+
+	<ImageView
+		android:layout_width="0dp"
+		android:layout_weight="1"
+		android:layout_height="wrap_content"
+		android:src="@drawable/drift_r"
+		android:layout_gravity="center"
+		android:layout_margin="8dp"/>
+
+	<TextView
+		android:layout_width="0dp"
+		android:layout_weight="1"
+		android:layout_height="wrap_content"
+		android:text="I"
+		style="@style/text_display3"
+		android:textColor="@color/white"
+		android:layout_gravity="center"
+		android:gravity="center"/>
+
+	<TextView
+		android:layout_width="0dp"
+		android:layout_weight="1"
+		android:layout_height="wrap_content"
+		android:text="F"
+		style="@style/text_display3"
+		android:textColor="@color/white"
+		android:layout_gravity="center"
+		android:gravity="center"/>
+
+	<TextView
+		android:layout_width="0dp"
+		android:layout_weight="1"
+		android:layout_height="wrap_content"
+		android:text="T"
+		style="@style/text_display3"
+		android:textColor="@color/white"
+		android:layout_gravity="center"
+		android:gravity="center"/>
+
+</LinearLayout>

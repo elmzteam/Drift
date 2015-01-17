@@ -14,20 +14,45 @@
 		android:layout_height="0dp"
 		android:layout_weight="1">
 
-		<TextView
+		<LinearLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Log In"
-			style="@style/text_title"
-			android:layout_alignParentTop="true"
-			android:layout_alignParentStart="true"
-			android:id="@+id/text_log_in"/>
+			android:orientation="horizontal"
+			android:id="@+id/titlebar_log_in" >
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Log In"
+				style="@style/text_title"
+				android:layout_marginEnd="12dp"
+				android:gravity="bottom" />
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text=""
+				style="@style/text_secondary"
+				android:layout_marginEnd="12dp"
+				android:gravity="bottom"
+				android:id="@+id/text_login_status"
+				android:textStyle="italic" />
+
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/ic_done"
+				android:id="@+id/ic_done_login"
+				android:visibility="invisible"
+				android:gravity="bottom" />
+
+		</LinearLayout>
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-			android:layout_below="@id/text_log_in"
+			android:layout_below="@id/titlebar_log_in"
 			android:id="@+id/ui_row_username"
 			style="@style/ui_row">
 
@@ -78,6 +103,13 @@
 			style="@style/button_raised"
 			android:id="@+id/btn_login_submit"/>
 
+		<ProgressBar
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/prog_login_spinner"
+			android:layout_below="@id/ui_row_password"
+			android:layout_alignParentEnd="true" />
+
 	</RelativeLayout>
 
 	<LinearLayout
@@ -86,12 +118,29 @@
 		android:layout_weight="1"
 		android:orientation="vertical">
 
-		<TextView
+		<LinearLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Connect Device"
-			style="@style/text_title"
-			android:id="@+id/text_connect_device"/>
+			android:orientation="horizontal"
+			android:id="@+id/titlebar_connect">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Connect Device"
+				style="@style/text_title"
+				android:layout_alignParentTop="true"
+				android:layout_alignParentStart="true"
+				android:layout_marginEnd="8dp" />
+
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/ic_done"
+				android:id="@+id/ic_done_connect"
+				android:visibility="invisible" />
+
+		</LinearLayout>
 
 		<RelativeLayout
 			android:layout_width="wrap_content"
@@ -166,7 +215,8 @@
 					android:text="Some kind of device ID"
 					android:layout_gravity="center_horizontal"
 					style="text_disabled"
-					android:layout_marginEnd="12dp"/>
+					android:layout_marginEnd="12dp"
+					android:id="@+id/text_device_id"/>
 			</LinearLayout>
 		</RelativeLayout>
 	</LinearLayout>
