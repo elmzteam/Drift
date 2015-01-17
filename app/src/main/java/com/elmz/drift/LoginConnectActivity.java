@@ -60,7 +60,7 @@ public class LoginConnectActivity extends Activity
 	};
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState){
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_connect);
 
@@ -72,9 +72,9 @@ public class LoginConnectActivity extends Activity
 		loginSpinner = (ProgressBar) findViewById(R.id.prog_login_spinner);
 		loginStatus = (TextView) findViewById(R.id.text_login_status);
 
-		btnLoginSubmit.setOnClickListener(new View.OnClickListener(){
+		btnLoginSubmit.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v){
+			public void onClick(View v) {
 				inpUsername.setEnabled(false);
 				inpPassword.setEnabled(false);
 				btnLoginSubmit.setEnabled(false);
@@ -86,12 +86,11 @@ public class LoginConnectActivity extends Activity
 				final String username = inpUsername.getText().toString();
 				final String password = inpPassword.getText().toString();
 
-				APIRequestFragment arf = new APIRequestFragment(new ICallback(){
+				APIRequestFragment arf = new APIRequestFragment(new ICallback() {
 					@Override
-					public void callback(JsonElement tok){
-						String token;
-						if(!tok.isJsonNull() && (token = tok.getAsString()).length() > 0){
-							if(token.length() > 0){
+					public void callback(JsonElement tok) {
+						String token = tok.getAsString();
+						if (token.length() > 0) {
 							Log.d(getString(R.string.log_tag), "Login accepted");
 
 							SharedPreferences.Editor editor = sp.edit();
@@ -101,23 +100,15 @@ public class LoginConnectActivity extends Activity
 							onLogin();
 						} else {
 							Log.d(getString(R.string.log_tag), "Login rejected");
+
 							loginStatus.setText("Invalid username or password.");
-
-
-							inpUsername.setEnabled(true);
-							inpPassword.setEnabled(true);
-							btnLoginSubmit.setEnabled(true);
-							btnLoginSubmit.setVisibility(View.VISIBLE);
-							loginSpinner.setVisibility(View.GONE);
 						}
 					}
 				});
-
-				arf.execute("POST", "authUser", username, password);
 			}
 		});
 
-		if(sp.getString("authToken", "").length() > 0 && sp.getString("username", "").length() > 0){
+		if (sp.getString("authToken", "").length() > 0 && sp.getString("username", "").length() > 0) {
 			loginStatus.setText("Checking stored authorization...");
 
 			inpUsername.setEnabled(false);
@@ -126,14 +117,14 @@ public class LoginConnectActivity extends Activity
 			btnLoginSubmit.setVisibility(View.GONE);
 			loginSpinner.setVisibility(View.VISIBLE);
 
-			APIRequestFragment arf = new APIRequestFragment(new ICallback(){
+			APIRequestFragment arf = new APIRequestFragment(new ICallback() {
 				@Override
-				public void callback(JsonElement arg){
+				public void callback(JsonElement arg) {
 					String status;
-					if(!arg.isJsonNull()) {
+					if (!arg.isJsonNull()) {
 						status = arg.getAsString();
 						Log.d(getString(R.string.log_tag), "Auth validation: " + status);
-						if(status.equals("true")){
+						if (status.equals("true")) {
 							onLogin();
 						} else {
 							loginStatus.setText("Invalid stored authorization.");
