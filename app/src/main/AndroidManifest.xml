@@ -19,7 +19,7 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".items.LoginConnectActivity"
+			android:name=".LoginConnectActivity"
 			android:label="Drift">
 		</activity>
 		<activity

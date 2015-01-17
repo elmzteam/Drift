@@ -55,6 +55,9 @@ public class MainActivity extends Activity
 		Fragment frag = null;
 
 		switch(position){
+			case 0:
+				frag = StatusFragment.newInstance();
+				break;
 			case 1:
 				frag = HistoryFragment.newInstance();
 				break;

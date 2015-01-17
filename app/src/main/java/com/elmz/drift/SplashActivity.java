@@ -5,8 +5,6 @@ package com.elmz.drift;
 	import android.os.Bundle;
 	import android.os.Handler;
 
-	import com.elmz.drift.items.LoginConnectActivity;
-
 public class SplashActivity extends Activity{
 
 	@Override

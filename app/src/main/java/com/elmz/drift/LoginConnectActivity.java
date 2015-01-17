@@ -1,4 +1,4 @@
-package com.elmz.drift.items;
+package com.elmz.drift;
 
 import android.app.Activity;
 import android.app.Fragment;

@@ -13,4 +13,7 @@
 
 	<color name="black">#000000</color>
 	<color name="white">#FFFFFF</color>
+
+	<color name="warning">#E53935</color>
+	<color name="ok">#43A047</color>
 </resources>

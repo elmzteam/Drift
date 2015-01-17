@@ -27,4 +27,8 @@
 
 	<dimen name="icon_width">24dp</dimen>
 	<dimen name="icon_height">24dp</dimen>
+
+
+	<dimen name="drowsiness_view_size">250dp</dimen>
+	<dimen name="drowsiness_ring_inner_radius">100dp</dimen>
 </resources>
