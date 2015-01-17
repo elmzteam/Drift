@@ -1,0 +1,173 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+							xmlns:tools="http://schemas.android.com/tools"
+							android:layout_width="match_parent"
+							android:layout_height="match_parent"
+							android:paddingLeft="@dimen/activity_horizontal_margin"
+							android:paddingRight="@dimen/activity_horizontal_margin"
+							android:paddingTop="@dimen/activity_vertical_margin"
+							android:paddingBottom="@dimen/activity_vertical_margin"
+							android:orientation="vertical"
+							android:background="@color/white">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Log In"
+			style="@style/text_title"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentStart="true"
+			android:id="@+id/text_log_in"/>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:layout_below="@id/text_log_in"
+			android:id="@+id/ui_row_username"
+			style="@style/ui_row">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				style="@style/text_hint"
+				android:text="Username"/>
+
+			<EditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/text_input_username"
+				android:inputType="textNoSuggestions|textVisiblePassword"
+				style="@style/input_single_line"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:layout_below="@id/ui_row_username"
+			android:id="@+id/ui_row_password"
+			style="@style/ui_row">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				style="@style/text_hint"
+				android:text="Password"/>
+
+			<EditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/text_input_password"
+				android:inputType="textPassword"
+				style="@style/input_single_line"/>
+
+		</LinearLayout>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="SUBMIT"
+			android:layout_below="@id/ui_row_password"
+			android:layout_alignParentEnd="true"
+			style="@style/button_raised"
+			android:id="@+id/btn_login_submit"/>
+
+	</RelativeLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:orientation="vertical">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Connect Device"
+			style="@style/text_title"
+			android:id="@+id/text_connect_device"/>
+
+		<RelativeLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:id="@+id/message_no_device">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:layout_weight="1"
+				android:layout_centerVertical="true">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="No device connected."
+					android:layout_gravity="center_horizontal"
+					android:id="@+id/text_no_device"
+					style="@style/text_display1_disabled"
+					android:layout_marginBottom="12dp"/>
+
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/text_no_device"
+					android:layout_gravity="center_horizontal">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Searching..."
+						android:layout_gravity="center_vertical"
+						style="text_disabled"
+						android:layout_marginRight="12dp"/>
+
+					<ProgressBar
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical"/>
+
+				</LinearLayout>
+			</LinearLayout>
+		</RelativeLayout>
+
+		<RelativeLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:id="@+id/message_device_found"
+			android:visibility="gone">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:layout_centerVertical="true">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Device found."
+					android:layout_gravity="center_horizontal"
+					android:id="@+id/text_device_found"
+					style="@style/text_display1_disabled"
+					android:layout_marginBottom="12dp"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Some kind of device ID"
+					android:layout_gravity="center_horizontal"
+					style="text_disabled"
+					android:layout_marginEnd="12dp"/>
+			</LinearLayout>
+		</RelativeLayout>
+	</LinearLayout>
+</LinearLayout>
