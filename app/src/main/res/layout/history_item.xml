@@ -19,24 +19,16 @@
 				android:layout_height="match_parent"
 				android:layout_width="120dp"
 				android:background="@color/accent"/>
-			<TextView
-				android:layout_width="120dp"
-				android:layout_height="50dp"
-				android:text="JAN"
-				android:gravity="bottom|center_horizontal"
-				android:textSize="@dimen/title_height"
-				android:textColor="@color/white"
-				android:id="@+id/history_item_month"/>
 
 			<TextView
 				android:layout_width="120dp"
-				android:layout_height="100dp"
+				android:layout_height="wrap_content"
 				android:text="12"
 				android:gravity="center_horizontal"
-				android:layout_below="@id/history_item_month"
+				android:layout_centerVertical="true"
 				android:textSize="@dimen/display3_height"
 				android:textColor="@color/white"
-				android:id="@+id/history_item_date"/>
+				android:id="@+id/history_item_score"/>
 
 			<TextView
 				android:layout_width="fill_parent"

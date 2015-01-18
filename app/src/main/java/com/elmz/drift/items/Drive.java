@@ -7,6 +7,7 @@ public class Drive{
 	private String to;
 	private Date start;
 	private Date end;
+	private int score;
 
 	public String getFrom(){
 		return from;
@@ -38,5 +39,13 @@ public class Drive{
 
 	public void setEnd(Date end){
 		this.end = end;
+	}
+
+	public int getScore(){
+		return score;
+	}
+
+	public void setScore(int score){
+		this.score = score;
 	}
 }

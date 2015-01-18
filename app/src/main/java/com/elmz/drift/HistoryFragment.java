@@ -1,22 +1,32 @@
 package com.elmz.drift;
 
-import android.app.Fragment;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
+	import android.app.Fragment;
+	import android.content.Context;
+	import android.content.SharedPreferences;
+	import android.os.Bundle;
+	import android.support.v7.widget.LinearLayoutManager;
+	import android.support.v7.widget.RecyclerView;
+	import android.util.Log;
+	import android.view.LayoutInflater;
+	import android.view.View;
+	import android.view.ViewGroup;
+	import android.widget.ProgressBar;
 
-import com.elmz.drift.adapters.HistoryAdapter;
-import com.elmz.drift.items.Drive;
-import com.google.gson.JsonElement;
+	import com.elmz.drift.adapters.HistoryAdapter;
+	import com.elmz.drift.items.Drive;
+	import com.google.gson.JsonArray;
+	import com.google.gson.JsonElement;
+	import com.google.gson.JsonObject;
 
-import java.util.Calendar;
+	import org.json.JSONArray;
+	import org.json.JSONObject;
+
+	import java.text.DateFormat;
+	import java.text.FieldPosition;
+	import java.text.ParsePosition;
+	import java.text.SimpleDateFormat;
+	import java.util.Calendar;
+	import java.util.Date;
 
 public class HistoryFragment extends Fragment {
 	public RecyclerView historyList;
@@ -45,32 +55,35 @@ public class HistoryFragment extends Fragment {
 			public void callback(JsonElement arg){
 				historySpinner.setVisibility(View.INVISIBLE);
 
-				// TODO: real data
-				Drive[] drives = new Drive[20];
+				try{
+					JsonArray drivesJson = arg.getAsJsonArray();
 
-				String[] locations = {"Herndon, VA", "Alexandria, VA", "Philadelphia, PA", "New York, NY", "Wilmington, DE", "Baltimore, MA", "Orlando, FL", "Reston, VA", "Denver, CO", "San Diego, CA", "San Francisco, CA", "Salt Lake City, UT", "Las Vegas, NV", "Dallas, TX", "Houston, TX"};
+					Drive[] drives = new Drive[drivesJson.size()];
 
-				for(int i = 0; i < drives.length; i++){
-					drives[i] = new Drive();
-					drives[i].setFrom(locations[(int)Math.floor(Math.random() * locations.length)]);
-					drives[i].setTo(locations[(int) Math.floor(Math.random() * locations.length)]);
+					for(int i = 0; i < drivesJson.size(); i++){
+						drives[i] = new Drive();
 
-					Calendar cal = Calendar.getInstance();
+						JsonObject driveObj = drivesJson.get(i).getAsJsonObject();
 
-					cal.add(Calendar.HOUR, (int)(-Math.floor(Math.random()*10000)));
+						Log.d(getString(R.string.log_tag), driveObj.toString());
 
-					drives[i].setStart(cal.getTime());
+						drives[i].setFrom(driveObj.get("startLocation").getAsString());
+						drives[i].setTo(driveObj.get("endLocation").getAsString());
 
-					cal.add(Calendar.MINUTE, (int)(Math.random() * 300));
+						drives[i].setStart(new Date(Long.parseLong(driveObj.get("startTime").getAsString())));
+						drives[i].setEnd(new Date(Long.parseLong(driveObj.get("endTime").getAsString())));
 
-					drives[i].setEnd(cal.getTime());
+						drives[i].setScore(driveObj.get("avgFatigue").getAsInt());
+					}
+
+					Log.d(getString(R.string.log_tag), "setting adapter");
+
+					adapter = new HistoryAdapter(drives);
+					historyList.setAdapter(adapter);
+					historyList.setVisibility(View.VISIBLE);
+				} catch(Exception e){
+					Log.e(getString(R.string.log_tag), "error :(");
 				}
-
-				Log.d(getString(R.string.log_tag), "setting adapter");
-
-				adapter = new HistoryAdapter(drives);
-				historyList.setAdapter(adapter);
-				historyList.setVisibility(View.VISIBLE);
 			}
 		});
 

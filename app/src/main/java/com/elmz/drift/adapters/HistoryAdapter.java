@@ -17,15 +17,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 	private String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
-		public TextView monthText;
-		public TextView dateText;
+		public TextView scoreText;
 		public TextView titleText;
 		public TextView subtitleText;
 
 		public ViewHolder(View v) {
 			super(v);
-			monthText = (TextView) v.findViewById(R.id.history_item_month);
-			dateText = (TextView) v.findViewById(R.id.history_item_date);
+			scoreText = (TextView) v.findViewById(R.id.history_item_score);
 			titleText = (TextView) v.findViewById(R.id.history_item_title);
 			subtitleText = (TextView) v.findViewById(R.id.history_item_subtitle);
 		}
@@ -44,8 +42,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int ind) {
-		holder.monthText.setText(months[data[ind].getStart().getMonth()]);
-		holder.dateText.setText(Integer.toString(data[ind].getStart().getDate()));
+		holder.scoreText.setText(Integer.toString(data[ind].getScore()));
 		DateFormat df = new SimpleDateFormat("MMM d, h:mm a");
 		holder.titleText.setText(data[ind].getFrom() + " to " + data[ind].getTo());
 		holder.subtitleText.setText(df.format(data[ind].getStart()) + " - " + df.format(data[ind].getEnd()));
