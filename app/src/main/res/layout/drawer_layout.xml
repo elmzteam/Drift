@@ -67,7 +67,8 @@
 			android:textStyle="bold"
 			android:textColor="@android:color/white"
 			android:ellipsize="end"
-			android:singleLine="true" />
+			android:singleLine="true"
+			android:text="Steven the Driver"/>
 		<!-- Username -->
 		<TextView
 			android:id="@+id/header_username"
@@ -80,7 +81,8 @@
 			android:textSize="14sp"
 			android:textColor="@android:color/white"
 			android:ellipsize="end"
-			android:singleLine="true" />
+			android:singleLine="true"
+			android:text="steve@thebest.com"/>
 		<!-- Navigation menu -->
 		<ListView
 			android:id="@+id/drawer"

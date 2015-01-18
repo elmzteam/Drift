@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="sensitivity">
+		<item name="high">High</item>
+		<item name="med">Medium</item>
+		<item name="low">Low</item>
+	</string-array>
+	<string-array name="sensitivity_values">
+		<item name="high">5000</item>
+		<item name="med">10000</item>
+		<item name="low">15000</item>
+	</string-array>
+</resources>

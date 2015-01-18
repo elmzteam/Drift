@@ -139,12 +139,12 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 	public NavDrawerActivityConfig getNavDrawerConfiguration(){
 		final NavDrawerAdapter adapter = new NavDrawerAdapter(this, R.layout.nav_item);
 		adapter.setItems(new NavMenuBuilder()
-			.addItem(NavMenuItem.create(0, "Status", R.drawable.ic_done))
-			.addItem(NavMenuItem.create(1, "History", R.drawable.ic_done))
-			.addSeparator()
-			.addItem(NavMenuItem.createButton(2, "Settings", R.drawable.ic_settings_black_24dp))
-			.addItem(NavMenuItem.createButton(3, "Logout", R.drawable.ic_exit_to_app_black_24dp))
-			.build());
+				.addItem(NavMenuItem.create(0, "Status", R.drawable.ic_home_black_24dp))
+				.addItem(NavMenuItem.create(1, "History", R.drawable.ic_history_black_24dp))
+				.addSeparator()
+				.addItem(NavMenuItem.createButton(2, "Settings", R.drawable.ic_settings_black_24dp))
+				.addItem(NavMenuItem.createButton(3, "Logout", R.drawable.ic_exit_to_app_black_24dp))
+				.build());
 
 		return new NavDrawerActivityConfig.Builder()
 			.mainLayout(R.layout.drawer_layout)
@@ -167,6 +167,7 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 				switchView(id);
 				break;
 			case 2:
+				startActivity(new Intent(this, PreferencesActivity.class));
 				break;
 			case 3:
 				SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);

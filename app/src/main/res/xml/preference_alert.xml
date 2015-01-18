@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory
+		android:title="Alerts"
+		android:key="category_alerts">
+
+		<CheckBoxPreference
+			android:key="alert"
+			android:title="Enable alerts"
+			android:summary="Toggle alerts when asleep at the wheel"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:key="vibrate"
+			android:title="Vibrate"
+			android:summary="Vibrate the phone when sleeping"
+			android:defaultValue="true"
+			android:dependency="alert"/>
+
+		<RingtonePreference
+			android:key="ringtone"
+			android:title="Alarm sound"
+			android:showDefault="true"
+			android:showSilent="true"
+			android:ringtoneType="notification|alarm"
+			android:persistent="false"
+			android:defaultValue="content://settings/system/alarm_alert"
+			android:dependency="alert"/>
+
+	</PreferenceCategory>
+
+</PreferenceScreen>

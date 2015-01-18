@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory
+		android:title="EEG Settings"
+		android:key="category_eeg">
+
+		<ListPreference
+			android:key="sensitivity"
+			android:title="Detection sensitivity"
+			android:summary="Set the sensitivity of sleep detection"
+			android:defaultValue="10000"
+			android:entries="@array/sensitivity"
+			android:entryValues="@array/sensitivity_values"/>
+
+	</PreferenceCategory>
+
+</PreferenceScreen>
