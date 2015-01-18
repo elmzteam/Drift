@@ -14,8 +14,8 @@ import com.elmz.drift.openbci.AlphaDetector;
 import java.text.DecimalFormat;
 
 public class StatusFragment extends Fragment{
-	public static StatusFragment newInstance(){
-		return new StatusFragment();
+	public static StatusFragment newInstance(Listener l){
+		return new StatusFragment(l);
 	}
 
 	private DrowsinessView drowsinessView;
@@ -28,9 +28,15 @@ public class StatusFragment extends Fragment{
 	private double currentBlinkLength;
 	private ChartView alphaChart;
 	private TextView textAlpha;
+    private Listener mListener;
 
-	public StatusFragment(){
-		super();
+    public interface Listener {
+        public void startStreaming();
+    }
+
+	public StatusFragment(Listener l) {
+        super();
+        mListener = l;
 	}
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -51,6 +57,12 @@ public class StatusFragment extends Fragment{
 
 		return view;
 	}
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mListener.startStreaming();
+    }
 
     public void onGetUpdate(boolean getUpdate, int dataformat, Object data) {
         if (getUpdate) {

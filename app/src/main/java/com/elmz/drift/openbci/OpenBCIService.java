@@ -2,6 +2,7 @@ package com.elmz.drift.openbci;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -40,7 +41,46 @@ public class OpenBCIService extends Service implements BrainStateCallback
     StreamReader mStreamReader = new StreamReader(this);
     AlphaDetector mAlphaDetector = new AlphaDetector(this);
 
-	final Handler INIT_HANDLER = new Handler() {
+    private final IBinder mBinder = new LocalBinder();
+
+    public class LocalBinder extends Binder {
+        public OpenBCIService getService() {
+            return OpenBCIService.this;
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+
+    public static final int MSG_TEST = 1;
+    private final Messenger mIncomingMessenger = new Messenger(new IncomingHandler());
+
+    private class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.arg1) {
+                case 1:
+                    Log.d(TAG, "Stream Start");
+                    startDataStream();
+                    break;
+                case 2:
+                    Log.d(TAG, "Stream Stop");
+                    stopDataStream();
+                    break;
+                default:
+                    super.handleMessage(msg);
+                    break;
+            }
+        }
+    }
+
+    public Messenger getIncomingMessenger() {
+        return mIncomingMessenger;
+    }
+
+    final Handler INIT_HANDLER = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			final byte[] input = (byte[]) msg.obj;
@@ -245,11 +285,6 @@ public class OpenBCIService extends Service implements BrainStateCallback
 
 		// If we get killed, after returning from here, restart
 		return START_STICKY;
-	}
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
 	}
 
 	@Override
