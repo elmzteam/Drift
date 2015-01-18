@@ -1,9 +1,11 @@
 package com.elmz.drift;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.hardware.usb.UsbManager;
 import android.location.Address;
@@ -12,8 +14,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -33,7 +37,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AbstractDrawerActivity implements LoginFragment.Listener{
+public class MainActivity extends AbstractDrawerActivity implements LoginFragment.Listener, StatusFragment.Listener{
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -43,6 +47,7 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 	private LoginFragment mLoginFragment;
 	private StatusFragment mStatusFragment;
 	private HistoryFragment mHistoryFragment;
+	private Messenger serviceMessenger;
 
 	private int tripId = -1;
 
@@ -69,7 +74,7 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 					mLoginFragment.onDevice(msg.arg1 == 1);
 					break;
 				case 0: // Status view
-
+					mStatusFragment.onGetUpdate(msg.arg1 == 2, msg.arg2, msg.obj);
 					break;
 				case 1: // History view
 
@@ -80,6 +85,24 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 		}
 	};
 
+	private OpenBCIService mService;
+	private boolean mBound = false;
+
+	private ServiceConnection mConnection = new ServiceConnection(){
+		public void onServiceConnected(ComponentName className, IBinder service){
+			OpenBCIService.LocalBinder binder = (OpenBCIService.LocalBinder) service;
+			mService = binder.getService();
+			mBound = true;
+			serviceMessenger = mService.getIncomingMessenger();
+		}
+
+		public void onServiceDisconnected(ComponentName className){
+			mService = null;
+			mBound = false;
+		}
+	};
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -88,6 +111,9 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 		final Intent service = new Intent(this, OpenBCIService.class);
 		service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
 		startService(service);
+		if(!mBound){
+			bindService(service, mConnection, BIND_AUTO_CREATE);
+		}
 		// Display login screen
 		switchView(-1);
 	}
@@ -95,6 +121,18 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 	@Override
 	public void home(){
 		switchView(0);
+	}
+
+	@Override
+	public void startStreaming(){
+		Message msg = Message.obtain();
+		msg.arg1 = 1; //1 is start streaming, 2 is stop streaming
+		try{
+			serviceMessenger.send(msg);
+		} catch(RemoteException e){
+			e.printStackTrace();
+			Log.w(getClass().getName(), "Exception sending message", e);
+		}
 	}
 
 	@Override
@@ -160,7 +198,7 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 				break;
 			case 0: // Status
 				if(mStatusFragment == null){
-					mStatusFragment = new StatusFragment();
+					mStatusFragment = new StatusFragment(this);
 				}
 				getFragmentManager().beginTransaction().replace(R.id.container, mStatusFragment).commit();
 				break;
@@ -226,6 +264,9 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 			}
 			final Intent service = new Intent(this, OpenBCIService.class);
 			service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
+			if(!mBound){
+				bindService(service, mConnection, BIND_AUTO_CREATE);
+			}
 			if(startService(service) != null){
 				stopService(service);
 			}

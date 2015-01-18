@@ -2,6 +2,7 @@ package com.elmz.drift.openbci;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -18,7 +19,7 @@ import java.util.Arrays;
 /**
  * Created by El1t on 1/17/15.
  */
-public class OpenBCIService extends Service
+public class OpenBCIService extends Service implements BrainStateCallback
 {
 	public static final String TAG = "OpenBCI Service";
 	private static final int MAX_READ_LENGTH = 512;
@@ -33,9 +34,53 @@ public class OpenBCIService extends Service
 	private boolean streaming;
 	private byte[] overflowBuffer = new byte[MAX_READ_LENGTH*2];
 	private int overflowLength = 0;
-	private Messenger mMessenger;
+    int[] alphaCheckChannels = {7-1,8-1};
 
-	final Handler INIT_HANDLER = new Handler() {
+    private Messenger mMessenger;
+
+    StreamReader mStreamReader = new StreamReader(this);
+    AlphaDetector mAlphaDetector = new AlphaDetector(this);
+
+    private final IBinder mBinder = new LocalBinder();
+
+    public class LocalBinder extends Binder {
+        public OpenBCIService getService() {
+            return OpenBCIService.this;
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+
+    public static final int MSG_TEST = 1;
+    private final Messenger mIncomingMessenger = new Messenger(new IncomingHandler());
+
+    private class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.arg1) {
+                case 1:
+                    Log.d(TAG, "Stream Start");
+                    startDataStream();
+                    break;
+                case 2:
+                    Log.d(TAG, "Stream Stop");
+                    stopDataStream();
+                    break;
+                default:
+                    super.handleMessage(msg);
+                    break;
+            }
+        }
+    }
+
+    public Messenger getIncomingMessenger() {
+        return mIncomingMessenger;
+    }
+
+    final Handler INIT_HANDLER = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			final byte[] input = (byte[]) msg.obj;
@@ -51,20 +96,21 @@ public class OpenBCIService extends Service
 					Log.w(getClass().getName(), "Exception sending message", e1);
 				}
 
-				new Handler().postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						writeToDevice(OpenBCICommands.START_STREAM);
-						streaming = true;
-					}
-				}, 70);
-				new Handler().postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						writeToDevice(OpenBCICommands.STOP_STREAM);
-						streaming = false;
-					}
-				}, 20000);
+//				new Handler().postDelayed(new Runnable() {
+//					@Override
+//					public void run() {
+//						writeToDevice(OpenBCICommands.START_STREAM);
+//						streaming = true;
+//					}
+//				}, 70);
+//				new Handler().postDelayed(new Runnable() {
+//					@Override
+//					public void run() {
+//						writeToDevice(OpenBCICommands.STOP_STREAM);
+//						streaming = false;
+//					}
+//				}, 20000);
+
 			} else {
 				Log.d(TAG, new String(decoded));
 			}
@@ -94,8 +140,8 @@ public class OpenBCIService extends Service
 					for (int j = index + 26; j < index + PACKET_LENGTH - 1; j += 2) {
 						temp.auxValues[(j - index - 26) / 2] = interpret16bitAsInt32(overflowBuffer[j], overflowBuffer[j + 1]) * mAccelScale;
 					}
-					temp.printToConsole();
-//					mStreamReader.addFrame(temp.values[0]);
+					//temp.printToConsole();
+                    analyze(temp);
 				}
 				System.arraycopy(overflowBuffer, index, overflowBuffer, 0, overflowLength + input.length - index);
 				overflowLength += input.length - index;
@@ -105,7 +151,12 @@ public class OpenBCIService extends Service
 		}
 	};
 
-	private class ReadThread extends Thread {
+    void analyze(DataPacket dp) {
+        mStreamReader.addFrame(dp.values[0]);
+        mAlphaDetector.addFrames(new float[]{(float)dp.values[alphaCheckChannels[0]],(float)dp.values[alphaCheckChannels[1]]});
+    }
+
+    private class ReadThread extends Thread {
 		public ReadThread() {
 			this.setPriority(Thread.NORM_PRIORITY);
 		}
@@ -153,7 +204,62 @@ public class OpenBCIService extends Service
 		}
 	}
 
-	@Override
+    public void startDataStream() {
+        writeToDevice(OpenBCICommands.START_STREAM);
+        streaming = true;
+    }
+
+    public void stopDataStream() {
+        writeToDevice(OpenBCICommands.STOP_STREAM);
+        streaming = false;
+    }
+
+    @Override
+    public void blinkStart() {
+        // Notify the StatusFragment obtained blink start
+        Message notif = Message.obtain();
+        notif.arg1=2;
+        notif.arg2=1;   //1 is blink start, 2 is blink end, 3 is alpha data
+        notif.obj=null;
+        try {
+            mMessenger.send(notif);
+        } catch (android.os.RemoteException e1) {
+            Log.w(getClass().getName(), "Exception sending message", e1);
+        }
+    }
+
+    @Override
+    public void blinkEnd(double blinkDuration) {
+        // Notify the StatusFragment obtained blink end
+        Message notif = Message.obtain();
+        notif.arg1=2;
+        notif.arg2=2;   //1 is blink start, 2 is blink end, 3 is alpha data
+        notif.obj=blinkDuration;
+        try {
+            mMessenger.send(notif);
+        } catch (android.os.RemoteException e1) {
+            Log.w(getClass().getName(), "Exception sending message", e1);
+        }
+    }
+
+    @Override
+    public void alpha(AlphaDetector.DetectionData_FreqDomain[] results) {
+        double alphampsum = 0;
+        for (AlphaDetector.DetectionData_FreqDomain ddfd : results) alphampsum += ddfd.inband_vs_guard_dB;
+        Log.d(TAG + "Alpha", Double.toString(alphampsum/results.length));
+        // Notify the StatusFragment obtained alpha data
+        Message notif = Message.obtain();
+        notif.arg1=2;
+        notif.arg2=3;   //1 is blink start, 2 is blink end, 3 is alpha data
+        notif.obj=results;
+        try {
+            mMessenger.send(notif);
+        } catch (android.os.RemoteException e1) {
+            Log.w(getClass().getName(), "Exception sending message", e1);
+        }
+    }
+
+    @Override
 	public void onCreate() {
 		super.onCreate();
 		Log.d(TAG, "Creating service");
@@ -179,11 +285,6 @@ public class OpenBCIService extends Service
 
 		// If we get killed, after returning from here, restart
 		return START_STICKY;
-	}
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
 	}
 
 	@Override
