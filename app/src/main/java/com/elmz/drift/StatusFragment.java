@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ public class StatusFragment extends Fragment{
 	private double[] blinkLengthBuffer = new double[5];
 	private double currentBlinkRate;
 	private double currentBlinkLength;
+    private double currentAlpha;
 	private ChartView alphaChart;
 	private TextView textAlpha;
 	private Listener mListener;
@@ -89,16 +92,26 @@ public class StatusFragment extends Fragment{
 				case 3:
 					AlphaDetector.DetectionData_FreqDomain[] alph = (AlphaDetector.DetectionData_FreqDomain[]) data;
 					double alphampsum = 0;
-					for(AlphaDetector.DetectionData_FreqDomain ddfd : alph)
-						alphampsum += ddfd.inband_vs_guard_dB;
+                    boolean isalpha = true;
+					for(AlphaDetector.DetectionData_FreqDomain ddfd : alph) {
+                        alphampsum += ddfd.inband_vs_guard_dB;
+                        isalpha = isalpha && ddfd.isDetected;
+                    }
+                    if (isalpha) {
+                        SoundHelper.alarm(getActivity());
+                    }
 					updateAlpha(alphampsum / alph.length);
 					break;
 			}
+            updateFatigueIndex();
 		}
 	}
 
-	private void updateFatigueIndex(int val){
-		drowsinessView.setValue(drowsinessView.getValue() + val);
+	private void updateFatigueIndex() {
+        int val = (int)Math.floor((1/(1 + Math.exp(-7 *((5 + currentAlpha)/15.0 - .5)))*0.60 + (currentBlinkLength >= .25 ? 1 :
+                0) + 0.1 + 1/(1 + Math.exp(-7 *((1 - 60/(2.0*currentBlinkRate)) - .5)))*0.3)*100);
+        Log.d("Fatigue", "" + val);
+		drowsinessView.setValue(val);
 	}
 
 	private void updateBlinkRate(){
@@ -126,7 +139,8 @@ public class StatusFragment extends Fragment{
 	}
 
 	private void updateAlpha(double ampl){
-		alphaChart.pushData(ampl);
-		textAlpha.setText(new DecimalFormat("#0").format(ampl));
+        currentAlpha = ampl;
+		alphaChart.pushData(currentAlpha);
+		textAlpha.setText(new DecimalFormat("#0").format(currentAlpha));
 	}
 }

@@ -35,7 +35,7 @@ public class AlphaDetector {
     String signalDetectName = "Alpha";
     float inband_Hz[] = {9.0f, 12.0f};  //look at energy within these frequencies
     float guard_Hz[] = {13.5f, 23.5f};  //and compare to energy within these frequencies
-    float fft_det_thresh_dB = 8.0f;      //how much higher does the in-band signal have to be above the guard band?
+    float fft_det_thresh_dB = 5.0f;      //how much higher does the in-band signal have to be above the guard band?
     DetectionData_FreqDomain[] detData_freqDomain = new DetectionData_FreqDomain[nchan]; //holds data describing any detections performed in the frequency domain
 
     //fft constants
