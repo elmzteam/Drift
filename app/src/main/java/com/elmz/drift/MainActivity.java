@@ -37,7 +37,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AbstractDrawerActivity implements LoginFragment.Listener, StatusFragment.Listener{
+public class MainActivity extends AbstractDrawerActivity implements LoginFragment.Listener, StatusFragment.Listener {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -199,7 +199,7 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 				break;
 			case 0: // Status
 				if(mStatusFragment == null){
-					mStatusFragment = new StatusFragment(this);
+					mStatusFragment = new StatusFragment();
 				}
 				getFragmentManager().beginTransaction().replace(R.id.container, mStatusFragment).commit();
 				break;

@@ -1,5 +1,6 @@
 package com.elmz.drift;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,9 +17,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class StatusFragment extends Fragment{
-	public static StatusFragment newInstance(Listener l){
-		return new StatusFragment(l);
-	}
 
 	private DrowsinessView drowsinessView;
 	private TextView textBlinkRate;
@@ -36,11 +34,6 @@ public class StatusFragment extends Fragment{
 
 	public interface Listener{
 		public void startStreaming();
-	}
-
-	public StatusFragment(Listener l){
-		super();
-		mListener = l;
 	}
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -66,6 +59,20 @@ public class StatusFragment extends Fragment{
 	public void onStart(){
 		super.onStart();
 		mListener.startStreaming();
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		// This makes sure that the container activity has implemented
+		// the callback interface. If not, it throws an exception
+		try {
+			mListener = (Listener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement StatusFragment.Listener");
+		}
 	}
 
 	public void onGetUpdate(boolean getUpdate, int dataformat, Object data){
