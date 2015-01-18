@@ -4,12 +4,12 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.elmz.drift.openbci.AlphaDetector;
 
 import java.text.DecimalFormat;
 
@@ -21,8 +21,11 @@ public class StatusFragment extends Fragment{
 	private DrowsinessView drowsinessView;
 	private TextView textBlinkRate;
 	private TextView textBlinkLength;
-	private double blinkRate;
-	private double blinkLength;
+    private boolean blinkLengthBufferFilled = false;
+    private int indexCycler = 0;
+    private double[] blinkLengthBuffer = {0,0,0,0,0};
+	private double currentBlinkRate;
+	private double currentBlinkLength;
 	private ChartView alphaChart;
 	private TextView textAlpha;
 
@@ -49,18 +52,46 @@ public class StatusFragment extends Fragment{
 		return view;
 	}
 
+    public void onGetUpdate(boolean getUpdate, int dataformat, Object data) {
+        if (getUpdate) {
+            switch(dataformat) {
+                case 1:
+
+                    break;
+                case 2:
+                    double blink = (double)data;
+                    updateBlinkLength(blink);
+                    break;
+                case 3:
+                    AlphaDetector.DetectionData_FreqDomain[] alph = (AlphaDetector.DetectionData_FreqDomain[])data;
+                    double alphampsum = 0;
+                    for (AlphaDetector.DetectionData_FreqDomain ddfd : alph) alphampsum += ddfd.inband_vs_guard_dB;
+                    updateAlpha(alphampsum/alph.length);
+                    break;
+            }
+        }
+    }
+
 	private void updateFatigueIndex(int val){
 		drowsinessView.setValue(drowsinessView.getValue() + val);
 	}
 
 	private void updateBlinkRate(double rate){
-		blinkRate += rate;
-		textBlinkRate.setText(new DecimalFormat("#0.0").format(blinkRate));
+		currentBlinkRate += rate;
+		textBlinkRate.setText(new DecimalFormat("#0.0").format(currentBlinkRate));
 	}
 
 	private void updateBlinkLength(double length){
-		blinkLength += length;
-		textBlinkLength.setText(new DecimalFormat("#0.00").format(blinkLength));
+        blinkLengthBuffer[indexCycler] = length;
+        indexCycler++;
+        if (blinkLengthBufferFilled) {
+            double sum = 0;
+            for (double d : blinkLengthBuffer) sum += d;
+            currentBlinkLength = sum / blinkLengthBuffer.length;
+            textBlinkLength.setText(new DecimalFormat("#0.00").format(currentBlinkLength));
+        } else {
+            if (indexCycler == 4) blinkLengthBufferFilled = true;
+        }
 	}
 
 	private void updateAlpha(double ampl){

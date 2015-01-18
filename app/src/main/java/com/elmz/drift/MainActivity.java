@@ -56,7 +56,7 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 					mLoginFragment.onDevice(msg.arg1 == 1);
 					break;
 				case 0: // Status view
-
+                    mStatusFragment.onGetUpdate(msg.arg1 == 2, msg.arg2, msg.obj);
 					break;
 				case 1: // History view
 
