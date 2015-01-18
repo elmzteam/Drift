@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +22,9 @@ import com.elmz.drift.drawer.NavDrawerAdapter;
 import com.elmz.drift.drawer.NavMenuBuilder;
 import com.elmz.drift.drawer.NavMenuItem;
 import com.elmz.drift.openbci.OpenBCIService;
+import com.google.gson.JsonElement;
+
+import java.util.Calendar;
 
 public class MainActivity extends AbstractDrawerActivity implements LoginFragment.Listener {
 
@@ -32,6 +36,8 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 	private LoginFragment mLoginFragment;
 	private StatusFragment mStatusFragment;
 	private HistoryFragment mHistoryFragment;
+
+	private int tripId = -1;
 
 	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
 		@Override
@@ -198,8 +204,10 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 			if (deviceEnabled) {
 				item.setIcon(R.drawable.ic_pause_circle_fill_white_48dp);
 				stopService(new Intent(this, OpenBCIService.class));
+				endDrive();
 			} else {
 				item.setIcon(R.drawable.ic_play_circle_fill_white_48dp);
+				startDrive();
 			}
 			final Intent service = new Intent(this, OpenBCIService.class);
 			service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
@@ -211,5 +219,70 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	public void startDrive(){
+		Log.d(getString(R.string.log_tag), "starting drive");
+
+		final String startLoc = "Herndon, VA"; // TODO
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		final long startTime = cal.getTimeInMillis();
+
+		final SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		final String username = sp.getString("username", "");
+		final String authToken = sp.getString("authToken", "");
+
+		APIRequestFragment arf = new APIRequestFragment(new ICallback(){
+			@Override
+			public void callback(JsonElement arg){
+				int tripId = arg.getAsInt();
+
+				APIRequestFragment arf2 = new APIRequestFragment(new ICallback(){
+					@Override
+					public void callback(JsonElement arg){
+
+					}
+				});
+
+				arf2.execute("POST", "setStart", username, authToken, Integer.toString(tripId), Long.toString(startTime), startLoc);
+
+				SharedPreferences.Editor editor = sp.edit();
+				editor.putInt("tripId", tripId);
+				editor.apply();
+			}
+		});
+
+		arf.execute("POST", "createTrip", username, authToken);
+	}
+
+	public void endDrive(){
+		Log.d(getString(R.string.log_tag), "ending drive");
+
+		final String endLoc = "Alexandria, VA"; // TODO
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		final long endTime = cal.getTimeInMillis();
+
+		final SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		final String username = sp.getString("username", "");
+		final String authToken = sp.getString("authToken", "");
+
+		final int drowsinessScore = 38; // TODO
+
+		APIRequestFragment arf = new APIRequestFragment(new ICallback(){
+			@Override
+			public void callback(JsonElement arg){
+				SharedPreferences.Editor editor = sp.edit();
+				editor.remove("tripId");
+				editor.apply();
+			}
+		});
+
+		arf.execute("POST", "setEnd", username, authToken, Integer.toString(sp.getInt("tripId", -1)), Long.toString(endTime), endLoc, Integer.toString(drowsinessScore));
 	}
 }
