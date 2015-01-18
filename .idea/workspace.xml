@@ -58,10 +58,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="status.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="status.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/status.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.24942791" vertical-offset="371" max-vertical-offset="1272">
+            <state vertical-scroll-proportion="-4.037037" vertical-offset="371" max-vertical-offset="1272">
               <caret line="174" column="19" selection-start-line="174" selection-start-column="19" selection-end-line="174" selection-end-column="19" />
               <folding>
                 <element signature="tag#android.support.v7.widget.CardView#0;tag#LinearLayout#0" expanded="false" />
@@ -92,13 +92,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LoginConnectActivity.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="LoginConnectActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/LoginConnectActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="964" max-vertical-offset="1884">
-              <caret line="133" column="66" selection-start-line="133" selection-start-column="66" selection-end-line="133" selection-end-column="66" />
+            <state vertical-scroll-proportion="-0.7586207" vertical-offset="1840" max-vertical-offset="2304">
+              <caret line="143" column="13" selection-start-line="143" selection-start-column="13" selection-end-line="143" selection-end-column="13" />
               <folding>
-                <element signature="e#4267#4294#0" expanded="true" />
+                <element signature="e#1015#1677#0" expanded="true" />
+                <element signature="e#1605#1632#0" expanded="true" />
+                <element signature="e#1673#1674#0" expanded="true" />
+                <element signature="e#1715#1814#0" expanded="true" />
+                <element signature="e#1810#1811#0" expanded="true" />
+                <element signature="e#2427#3759#0" expanded="true" />
+                <element signature="e#2923#3690#0" expanded="true" />
+                <element signature="e#3086#3113#0" expanded="true" />
+                <element signature="e#3349#3376#0" expanded="true" />
+                <element signature="e#3683#3684#0" expanded="true" />
+                <element signature="e#3754#3755#0" expanded="true" />
+                <element signature="e#4215#4890#0" expanded="true" />
+                <element signature="e#4387#4414#0" expanded="true" />
+                <element signature="e#4821#4848#0" expanded="true" />
+                <element signature="e#4884#4885#0" expanded="true" />
+                <element signature="e#5611#5638#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -722,8 +737,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/ChartFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/ChartView.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/LoginConnectActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/status.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/LoginConnectActivity.java" />
       </list>
     </option>
   </component>
@@ -1246,7 +1261,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33997428" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33997428" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916668" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -1483,10 +1498,10 @@
         <state vertical-scroll-proportion="-7.2222223" vertical-offset="81" max-vertical-offset="2232">
           <caret line="23" column="43" selection-start-line="23" selection-start-column="43" selection-end-line="23" selection-end-column="43" />
           <folding>
-            <element signature="e#241#276#0" expanded="true" />
-            <element signature="e#305#340#0" expanded="true" />
-            <element signature="e#367#400#0" expanded="true" />
-            <element signature="e#430#463#0" expanded="true" />
+            <element signature="e#218#253#0" expanded="true" />
+            <element signature="e#276#311#0" expanded="true" />
+            <element signature="e#332#365#0" expanded="true" />
+            <element signature="e#389#422#0" expanded="true" />
             <element signature="tag#RelativeLayout#0;tag#LinearLayout#0;tag#LinearLayout#0" expanded="false" />
           </folding>
         </state>
@@ -1551,10 +1566,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.16991644" vertical-offset="253" max-vertical-offset="1116">
           <caret line="16" column="47" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
-          <folding>
-            <element signature="e#1072#1093#0" expanded="true" />
-            <element signature="e#1382#1406#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer">
@@ -1698,19 +1710,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/LoginConnectActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="964" max-vertical-offset="1884">
-          <caret line="133" column="66" selection-start-line="133" selection-start-column="66" selection-end-line="133" selection-end-column="66" />
-          <folding>
-            <element signature="e#4267#4294#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/status.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.24942791" vertical-offset="371" max-vertical-offset="1272">
+        <state vertical-scroll-proportion="-4.037037" vertical-offset="371" max-vertical-offset="1272">
           <caret line="174" column="19" selection-start-line="174" selection-start-column="19" selection-end-line="174" selection-end-column="19" />
           <folding>
             <element signature="tag#android.support.v7.widget.CardView#0;tag#LinearLayout#0" expanded="false" />
@@ -1723,6 +1725,31 @@
       </provider>
       <provider editor-type-id="android-designer">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/LoginConnectActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.7586207" vertical-offset="1840" max-vertical-offset="2304">
+          <caret line="143" column="13" selection-start-line="143" selection-start-column="13" selection-end-line="143" selection-end-column="13" />
+          <folding>
+            <element signature="e#1015#1677#0" expanded="true" />
+            <element signature="e#1605#1632#0" expanded="true" />
+            <element signature="e#1673#1674#0" expanded="true" />
+            <element signature="e#1715#1814#0" expanded="true" />
+            <element signature="e#1810#1811#0" expanded="true" />
+            <element signature="e#2427#3759#0" expanded="true" />
+            <element signature="e#2923#3690#0" expanded="true" />
+            <element signature="e#3086#3113#0" expanded="true" />
+            <element signature="e#3349#3376#0" expanded="true" />
+            <element signature="e#3683#3684#0" expanded="true" />
+            <element signature="e#3754#3755#0" expanded="true" />
+            <element signature="e#4215#4890#0" expanded="true" />
+            <element signature="e#4387#4414#0" expanded="true" />
+            <element signature="e#4821#4848#0" expanded="true" />
+            <element signature="e#4884#4885#0" expanded="true" />
+            <element signature="e#5611#5638#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
   </component>
