@@ -10,6 +10,9 @@
 	<string name="navigation_drawer_close">Close navigation drawer</string>
 	<string name="action_toggle">Toggle Connection</string>
 	<string name="action_settings">Settings</string>
+	<string name="action_drawer_open">Drawer Open</string>
+	<string name="action_drawer_close">Drawer Close</string>
+
 
 	<string name="log_tag">ELMZ-DRFT</string>
 

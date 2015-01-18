@@ -58,7 +58,6 @@ public class LoginFragment extends Fragment
 		foundDevice = (LinearLayout) view.findViewById(R.id.message_device_found);
 		deviceId = (TextView) view.findViewById(R.id.text_device_id);
 
-
 		btnLoginSubmit.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -134,7 +133,7 @@ public class LoginFragment extends Fragment
 			arf.execute("POST", "isValid", sp.getString("username", ""), sp.getString("authToken", ""));
 		}
 
-
+		
 		// TODO: remove this
 
 		view.findViewById(R.id.message_no_device).setOnClickListener(new View.OnClickListener(){
@@ -143,7 +142,6 @@ public class LoginFragment extends Fragment
 				onDevice(true);
 			}
 		});
-
 
 		return view;
 	}
