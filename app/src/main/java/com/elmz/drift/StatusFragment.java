@@ -73,7 +73,7 @@ public class StatusFragment extends Fragment{
             switch(dataformat) {
                 case 1:
                     blinks.add(System.currentTimeMillis());
-                    updateBlinkLength();
+                    updateBlinkRate();
                     break;
                 case 2:
                     double blink = (double)data;
