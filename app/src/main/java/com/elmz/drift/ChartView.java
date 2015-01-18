@@ -43,7 +43,7 @@ public class ChartView extends View{
 	private void init(){
 		minimum = 0;
 		maximum = 25;
-		threshold = 10;
+		threshold = 5;
 		pnt = new Paint();
 		data = new LinkedList<Double>();
 		dpConversion = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics());

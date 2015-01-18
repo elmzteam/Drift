@@ -69,9 +69,6 @@ public class OpenBCIService extends Service implements BrainStateCallback
                     Log.d(TAG, "Stream Stop");
                     stopDataStream();
                     break;
-                default:
-                    super.handleMessage(msg);
-                    break;
             }
         }
     }
@@ -92,7 +89,7 @@ public class OpenBCIService extends Service implements BrainStateCallback
 				notif.arg1=1;
 				try {
 					mMessenger.send(notif);
-				} catch (android.os.RemoteException e1) {
+				} catch (Exception e1) {
 					Log.w(getClass().getName(), "Exception sending message", e1);
 				}
 
@@ -223,7 +220,7 @@ public class OpenBCIService extends Service implements BrainStateCallback
         notif.obj=null;
         try {
             mMessenger.send(notif);
-        } catch (android.os.RemoteException e1) {
+        } catch (Exception e1) {
             Log.w(getClass().getName(), "Exception sending message", e1);
         }
     }
@@ -254,7 +251,7 @@ public class OpenBCIService extends Service implements BrainStateCallback
         notif.obj=results;
         try {
             mMessenger.send(notif);
-        } catch (android.os.RemoteException e1) {
+        } catch (Exception e1) {
             Log.w(getClass().getName(), "Exception sending message", e1);
         }
     }
@@ -380,7 +377,7 @@ public class OpenBCIService extends Service implements BrainStateCallback
 		notif.arg1 = 0;
 		try {
 			mMessenger.send(notif);
-		} catch (android.os.RemoteException e1) {
+		} catch (Exception e1) {
 			Log.w(getClass().getName(), "Exception sending message", e1);
 		}
 	}
