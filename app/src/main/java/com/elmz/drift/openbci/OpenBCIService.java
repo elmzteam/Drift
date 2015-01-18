@@ -1,18 +1,12 @@
 package com.elmz.drift.openbci;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.hardware.usb.UsbManager;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ftdi.j2xx.D2xxManager;
 import com.ftdi.j2xx.FT_Device;
@@ -50,7 +44,7 @@ public class OpenBCIService extends Service
 				Log.d(TAG, "EOT received");
 				// Notify the LoginActivity that OpenBCI is initialized
 				Message notif = Message.obtain();
-				msg.arg1=1;
+				notif.arg1=1;
 				try {
 					mMessenger.send(notif);
 				} catch (android.os.RemoteException e1) {
@@ -177,7 +171,8 @@ public class OpenBCIService extends Service
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		Log.d(TAG, "Starting OpenBCI service");
-		if (intent.getExtras() != null) {
+		// Note: intent is null when service restarts itself
+		if (intent != null && intent.getExtras() != null) {
 			mMessenger = (Messenger) intent.getExtras().get(TAG);
 		}
 		connectDevice();
@@ -274,9 +269,18 @@ public class OpenBCIService extends Service
 		if(mDevice != null) {
 			synchronized(mDevice) {
 				if(mDevice.isOpen()) {
+					writeToDevice(OpenBCICommands.STOP_STREAM);
 					mDevice.close();
 				}
 			}
+		}
+		// Notify the LoginActivity that OpenBCI has been disconnected
+		Message notif = Message.obtain();
+		notif.arg1 = 0;
+		try {
+			mMessenger.send(notif);
+		} catch (android.os.RemoteException e1) {
+			Log.w(getClass().getName(), "Exception sending message", e1);
 		}
 	}
 

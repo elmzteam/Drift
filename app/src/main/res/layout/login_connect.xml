@@ -19,6 +19,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
+			android:paddingBottom="8dp"
 			android:id="@+id/titlebar_log_in" >
 
 			<TextView
@@ -54,7 +55,7 @@
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
 			android:layout_below="@id/titlebar_log_in"
-			android:id="@+id/ui_row_username"
+			android:id="@+id/ui_input_fields"
 			style="@style/ui_row">
 
 			<TextView
@@ -70,19 +71,10 @@
 				android:inputType="textNoSuggestions|textVisiblePassword"
 				style="@style/input_single_line"/>
 
-		</LinearLayout>
-
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:layout_below="@id/ui_row_username"
-			android:id="@+id/ui_row_password"
-			style="@style/ui_row">
-
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:paddingTop="16dp"
 				style="@style/text_hint"
 				android:text="Password"/>
 
@@ -99,7 +91,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="SUBMIT"
-			android:layout_below="@id/ui_row_password"
+			android:layout_below="@id/ui_input_fields"
 			android:layout_alignParentEnd="true"
 			style="@style/button_raised"
 			android:id="@+id/btn_login_submit"/>
@@ -108,7 +100,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:id="@+id/prog_login_spinner"
-			android:layout_below="@id/ui_row_password"
+			android:layout_below="@id/ui_input_fields"
 			android:layout_alignParentEnd="true"
 			android:visibility="gone"/>
 
@@ -118,6 +110,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"
+		android:paddingTop="16dp"
 		android:orientation="vertical">
 
 		<LinearLayout
@@ -129,7 +122,7 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Connect Device"
+				android:text="Connect OpenBCI"
 				style="@style/text_title"
 				android:layout_alignParentTop="true"
 				android:layout_alignParentStart="true"
@@ -144,8 +137,8 @@
 
 		</LinearLayout>
 
-		<RelativeLayout
-			android:layout_width="wrap_content"
+		<FrameLayout
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:id="@+id/message_no_device">
@@ -154,17 +147,17 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="vertical"
-				android:layout_weight="1"
-				android:layout_centerVertical="true">
+				android:layout_gravity="center"
+				android:layout_weight="1">
 
 				<TextView
-					android:layout_width="wrap_content"
+					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:text="No device connected."
-					android:layout_gravity="center_horizontal"
+					android:text="Not connected"
+					android:gravity="center"
 					android:id="@+id/text_no_device"
 					style="@style/text_display1_disabled"
-					android:layout_marginBottom="12dp"/>
+					android:paddingBottom="12dp"/>
 
 				<LinearLayout
 					android:layout_width="wrap_content"
@@ -187,21 +180,22 @@
 
 				</LinearLayout>
 			</LinearLayout>
-		</RelativeLayout>
+		</FrameLayout>
 
-		<RelativeLayout
-			android:layout_width="wrap_content"
+		<LinearLayout
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:gravity="center"
 			android:id="@+id/message_device_found"
-			android:visibility="gone"
-			android:gravity="center_vertical">
+			android:orientation="vertical"
+			android:visibility="gone">
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Device found."
-				android:layout_gravity="center_horizontal"
+				android:text="Device found"
+				android:layout_gravity="center"
 				android:id="@+id/text_device_found"
 				style="@style/text_display1_disabled"
 				android:layout_marginBottom="12dp"/>
@@ -209,11 +203,11 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Some kind of device ID"
-				android:layout_gravity="center_horizontal"
+				android:text="OpenBCI connected."
+				android:layout_gravity="center"
 				style="text_disabled"
 				android:layout_marginEnd="12dp"
 				android:id="@+id/text_device_id"/>
-		</RelativeLayout>
+		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>

@@ -1,36 +1,77 @@
 package com.elmz.drift;
 
-import android.app.Activity;
-
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.os.Build;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
+import com.elmz.drift.openbci.OpenBCIService;
 
 public class MainActivity extends Activity
-	implements NavigationDrawerFragment.NavigationDrawerCallbacks{
+	implements NavigationDrawerFragment.NavigationDrawerCallbacks, LoginFragment.Listener {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
 	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
+	private boolean deviceEnabled = false;
+	private int mPosition;
+	private LoginFragment mLoginFragment;
+	private StatusFragment mStatusFragment;
+	private HistoryFragment mHistoryFragment;
 
 	/**
 	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
 	 */
 	private CharSequence mTitle;
+
+	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			switch (intent.getAction()) {
+				case UsbManager.ACTION_USB_ACCESSORY_ATTACHED:
+					break;
+				case UsbManager.ACTION_USB_DEVICE_DETACHED:
+					stopService(new Intent(MainActivity.this, OpenBCIService.class));
+					Log.d(getString(R.string.log_tag), "Service stopped");
+					break;
+			}
+		}
+	};
+
+	private Handler serviceCallback = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch(mPosition) {
+				case -1: // Login view
+					mLoginFragment.onDevice(msg.arg1 == 1);
+					break;
+				case 0: // Status view
+
+					break;
+				case 1: // History view
+
+					break;
+				case 2: // Settings view
+					break;
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -45,40 +86,81 @@ public class MainActivity extends Activity
 		mNavigationDrawerFragment.setUp(
 			R.id.navigation_drawer,
 			(DrawerLayout) findViewById(R.id.drawer_layout));
+		// Start service
+		final Intent service = new Intent(this, OpenBCIService.class);
+		service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
+		startService(service);
+		// Display login screen
+		switchView(-1);
 	}
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position){
 		// update the main content by replacing fragments
-		FragmentManager fragmentManager = getFragmentManager();
-
-		Fragment frag = null;
-
-		switch(position){
-			case 0:
-				frag = StatusFragment.newInstance();
-				break;
-			case 1:
-				frag = HistoryFragment.newInstance();
-				break;
-			default:
-				frag = PlaceholderFragment.newInstance(position+1);
-		}
-
-		fragmentManager.beginTransaction().replace(R.id.container, frag).commit();
-		onSectionAttached(position);
+		switchView(position);
 	}
 
-	public void onSectionAttached(int position){
-		switch(position){
-			case 0:
-				mTitle = getString(R.string.title_section1);
+	@Override
+	public void home() {
+		switchView(0);
+	}
+
+	public void switchView(int viewId) {
+		mPosition = viewId;
+		switch(viewId) {
+			case -1: // Login
+				if (mLoginFragment == null) {
+					mLoginFragment = new LoginFragment();
+				}
+				getFragmentManager().beginTransaction().replace(R.id.container, mLoginFragment).commit();
 				break;
+			case 0: // Status
+				if (mStatusFragment == null) {
+					mStatusFragment = new StatusFragment();
+				}
+				getFragmentManager().beginTransaction().replace(R.id.container, mStatusFragment).commit();
+				break;
+			case 1: // History
+				if (mHistoryFragment == null) {
+					mHistoryFragment = new HistoryFragment();
+				}
+				getFragmentManager().beginTransaction().replace(R.id.container, mHistoryFragment).commit();
+				break;
+			case 2: // Settings
+				break;
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		// OpenBCI connection receiver
+		final IntentFilter filter = new IntentFilter();
+		filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+		filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+		filter.setPriority(500);
+		registerReceiver(mUsbReceiver, filter);
+		Log.d(getString(R.string.log_tag), "Registered receiver");
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		unregisterReceiver(mUsbReceiver);
+	}
+
+	public void onSectionAttached(int number){
+		switch(number){
+			case -1:
+				mTitle = getString(R.string.title_login);
 			case 1:
-				mTitle = getString(R.string.title_section2);
+				mTitle = getString(R.string.title_status);
 				break;
 			case 2:
-				mTitle = getString(R.string.title_section3);
+				mTitle = getString(R.string.title_history);
+				break;
+			case 3:
+				mTitle = getString(R.string.title_settings);
 				break;
 		}
 	}
@@ -112,7 +194,15 @@ public class MainActivity extends Activity
 		int id = item.getItemId();
 
 		//noinspection SimplifiableIfStatement
-		if(id == R.id.action_settings){
+		if(id == R.id.action_toggle){
+			if (deviceEnabled) {
+				stopService(new Intent(MainActivity.this, OpenBCIService.class));
+			} else {
+				final Intent service = new Intent(this, OpenBCIService.class);
+				service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
+				startService(service);
+			}
+			deviceEnabled = !deviceEnabled;
 			return true;
 		}
 
@@ -154,6 +244,8 @@ public class MainActivity extends Activity
 		@Override
 		public void onAttach(Activity activity){
 			super.onAttach(activity);
+			((MainActivity) activity).onSectionAttached(
+					getArguments().getInt(ARG_SECTION_NUMBER));
 		}
 	}
 

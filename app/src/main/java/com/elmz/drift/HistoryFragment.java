@@ -16,23 +16,13 @@ import com.elmz.drift.adapters.HistoryAdapter;
 import com.elmz.drift.items.Drive;
 import com.google.gson.JsonElement;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class HistoryFragment extends Fragment{
-	public static HistoryFragment newInstance(){
-		return new HistoryFragment();
-	}
-
+public class HistoryFragment extends Fragment {
 	public RecyclerView historyList;
 	public ProgressBar historySpinner;
 	public LinearLayoutManager llm;
 	public HistoryAdapter adapter;
-
-	public HistoryFragment(){
-		super();
-	}
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View view = inflater.inflate(R.layout.history_list, container, false);

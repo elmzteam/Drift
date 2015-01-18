@@ -5,27 +5,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.elmz.drift.adapters.HistoryAdapter;
-import com.elmz.drift.items.Drive;
-import com.google.gson.JsonElement;
-
 import java.text.DecimalFormat;
-import java.util.Calendar;
 
-public class StatusFragment extends Fragment{
-	public static StatusFragment newInstance(){
-		return new StatusFragment();
-	}
-
+public class StatusFragment extends Fragment {
 	private DrowsinessView drowsinessView;
 	private TextView textBlinkRate;
 	private TextView textBlinkLength;
