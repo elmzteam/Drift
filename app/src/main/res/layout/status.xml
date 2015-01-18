@@ -1,137 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-							xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+
+		<android.support.v7.widget.CardView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="12dp"
+			android:elevation="2dp">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				android:layout_margin="12dp">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/text_title"
+					android:text="Fatigue Index"/>
+
+				<com.elmz.drift.DrowsinessView
+					android:layout_width="@dimen/drowsiness_view_size"
+					android:layout_height="@dimen/drowsiness_view_size"
+					android:id="@+id/drowsiness_view"
+					style="@style/text_display4"
+					android:layout_gravity="center_horizontal"
+					android:gravity="center"
+					android:layout_marginBottom="8dp"/>
+
+			</LinearLayout>
+
+		</android.support.v7.widget.CardView>
+
+		<android.support.v7.widget.CardView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="12dp"
+			android:elevation="2dp">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_margin="12dp"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Blinking"
+					style="@style/text_title"/>
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal">
+
+					<LinearLayout
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:orientation="vertical">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="Blink Rate"
+							style="@style/text_subhead"/>
+
+						<LinearLayout
+							android:layout_width="wrap_content"
+							android:layout_gravity="end"
+							android:layout_height="0dp"
+							android:layout_weight="1">
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="2.6"
+								android:gravity="bottom|end"
+								style="@style/text_display2"
+								android:id="@+id/text_blink_rate"/>
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="/min"
+								style="@style/text_display1_disabled"
+								android:layout_marginStart="4dp"/>
+
+						</LinearLayout>
+
+					</LinearLayout>
+
+					<View
+						style="@style/vertical_divider"/>
+
+					<LinearLayout
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:orientation="vertical">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="Blink Length"
+							style="@style/text_subhead"/>
+
+						<LinearLayout
+							android:layout_width="wrap_content"
+							android:gravity="end"
+							android:layout_height="0dp"
+							android:layout_weight="1"
+							android:layout_gravity="end">
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="0.12"
+								style="@style/text_display2"
+								android:id="@+id/text_blink_length"/>
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="s"
+								android:gravity="bottom|end"
+								style="@style/text_display1_disabled"
+								android:layout_marginStart="4dp"/>
+
+						</LinearLayout>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+		</android.support.v7.widget.CardView>
+
+		<android.support.v7.widget.CardView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="12dp"
+			android:elevation="2dp">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_margin="12dp"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Alpha Waves"
+					style="@style/text_title"/>
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal">
+
+					<LinearLayout
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="2"
+						android:orientation="vertical">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="Over Time"
+							style="@style/text_subhead"/>
+
+						<com.elmz.drift.ChartView
 							android:layout_width="match_parent"
-							android:layout_height="match_parent"
-							android:orientation="vertical">
-
-	<android.support.v7.widget.CardView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_margin="12dp"
-		android:elevation="2dp">
-
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="vertical"
-			android:layout_margin="12dp">
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				style="@style/text_title"
-				android:text="Fatigue Index"/>
-
-			<com.elmz.drift.DrowsinessView
-				android:layout_width="@dimen/drowsiness_view_size"
-				android:layout_height="@dimen/drowsiness_view_size"
-				android:id="@+id/drowsiness_view"
-				style="@style/text_display4"
-				android:layout_gravity="center_horizontal"
-				android:gravity="center"
-				android:layout_marginBottom="8dp"/>
-
-		</LinearLayout>
-
-	</android.support.v7.widget.CardView>
-
-	<android.support.v7.widget.CardView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_margin="12dp"
-		android:elevation="2dp">
-
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_margin="12dp"
-			android:orientation="vertical">
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Blinking"
-				style="@style/text_title"/>
-
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="horizontal">
-
-				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:orientation="vertical">
-
-					<TextView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Blink Rate"
-						style="@style/text_subhead"/>
-
-					<LinearLayout
-						android:layout_width="wrap_content"
-						android:layout_gravity="end"
-						android:layout_height="0dp"
-						android:layout_weight="1">
-
-						<TextView
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="2.6"
-							android:gravity="bottom|end"
-							style="@style/text_display2"
-							android:id="@+id/text_blink_rate"/>
-
-						<TextView
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="/min"
-							style="@style/text_display1_disabled"
-							android:layout_marginStart="4dp"/>
+							android:layout_height="44dp"
+							android:layout_marginTop="8dp"
+							android:id="@+id/chart_alpha"/>
 
 					</LinearLayout>
 
-				</LinearLayout>
-
-				<View
-					style="@style/vertical_divider"/>
-
-				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:orientation="vertical">
-
-					<TextView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Blink Length"
-						style="@style/text_subhead"/>
+					<View
+						style="@style/vertical_divider"/>
 
 					<LinearLayout
-						android:layout_width="wrap_content"
-						android:gravity="end"
-						android:layout_height="0dp"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
 						android:layout_weight="1"
-						android:layout_gravity="end">
+						android:orientation="vertical">
 
 						<TextView
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:text="0.12"
-							style="@style/text_display2"
-							android:id="@+id/text_blink_length"/>
+							android:text="Currently"
+							style="@style/text_subhead"/>
 
-						<TextView
+						<LinearLayout
 							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="s"
-							android:gravity="bottom|end"
-							style="@style/text_display1_disabled"
-							android:layout_marginStart="4dp"/>
+							android:gravity="end"
+							android:layout_height="0dp"
+							android:layout_weight="1"
+							android:layout_gravity="end">
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="34"
+								style="@style/text_display2"
+								android:id="@+id/text_current_alpha"/>
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="%"
+								android:gravity="bottom|end"
+								style="@style/text_display1_disabled"
+								android:layout_marginStart="4dp"/>
+
+						</LinearLayout>
 
 					</LinearLayout>
 
@@ -139,98 +236,8 @@
 
 			</LinearLayout>
 
-		</LinearLayout>
+		</android.support.v7.widget.CardView>
 
-	</android.support.v7.widget.CardView>
+	</LinearLayout>
 
-	<android.support.v7.widget.CardView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_margin="12dp"
-		android:elevation="2dp">
-
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_margin="12dp"
-			android:orientation="vertical">
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Alpha Waves"
-				style="@style/text_title"/>
-
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="horizontal">
-
-				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="2"
-					android:orientation="vertical">
-
-					<TextView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Over Time"
-						style="@style/text_subhead"/>
-
-					<com.elmz.drift.ChartView
-						android:layout_width="match_parent"
-						android:layout_height="44dp"
-						android:layout_marginTop="8dp"
-						android:id="@+id/chart_alpha"/>
-
-				</LinearLayout>
-
-				<View
-					style="@style/vertical_divider"/>
-
-				<LinearLayout
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:orientation="vertical">
-
-					<TextView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Currently"
-						style="@style/text_subhead"/>
-
-					<LinearLayout
-						android:layout_width="wrap_content"
-						android:gravity="end"
-						android:layout_height="0dp"
-						android:layout_weight="1"
-						android:layout_gravity="end">
-
-						<TextView
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="34"
-							style="@style/text_display2"
-							android:id="@+id/text_current_alpha"/>
-
-						<TextView
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="%"
-							android:gravity="bottom|end"
-							style="@style/text_display1_disabled"
-							android:layout_marginStart="4dp"/>
-
-					</LinearLayout>
-
-				</LinearLayout>
-
-			</LinearLayout>
-
-		</LinearLayout>
-
-	</android.support.v7.widget.CardView>
-
-</LinearLayout>
+</ScrollView>
