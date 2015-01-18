@@ -1,76 +1,63 @@
 package com.elmz.drift;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.hardware.usb.UsbManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Messenger;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.elmz.drift.openbci.OpenBCIService;
 import com.google.gson.JsonElement;
 
-public class LoginConnectActivity extends Activity
+public class LoginFragment extends Fragment
 {
 	private EditText inpUsername;
 	private EditText inpPassword;
 	private Button btnLoginSubmit;
 	private ProgressBar loginSpinner;
 	private TextView loginStatus;
+	private ImageView loginDone;
+	private ImageView connectDone;
+	private FrameLayout noDevice;
+	private LinearLayout foundDevice;
+	private TextView deviceId;
+	private Listener mListener;
 
 	private boolean loginOk = false;
 	private boolean deviceOk = false;
 
 	private SharedPreferences sp;
 
-	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			switch (intent.getAction()) {
-				case UsbManager.ACTION_USB_ACCESSORY_ATTACHED:
-//					final Intent service = new Intent(LoginConnectActivity.this, OpenBCIService.class);
-//					service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
-//					startService(service);
-//					Log.d(getString(R.string.log_tag), "Service started");
-					break;
-				case UsbManager.ACTION_USB_DEVICE_DETACHED:
-					stopService(new Intent(LoginConnectActivity.this, OpenBCIService.class));
-					Log.d(getString(R.string.log_tag), "Service stopped");
-					break;
-			}
-		}
-	};
-
-	private Handler serviceCallback = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			onDevice("what?");
-		}
-	};
+	public interface Listener {
+		public void home();
+	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login_connect);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.login_connect, container, false);
 
-		sp = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		sp = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+		inpUsername = (EditText) view.findViewById(R.id.text_input_username);
+		inpPassword = (EditText) view.findViewById(R.id.text_input_password);
+		btnLoginSubmit = (Button) view.findViewById(R.id.btn_login_submit);
+		loginSpinner = (ProgressBar) view.findViewById(R.id.prog_login_spinner);
+		loginStatus = (TextView) view.findViewById(R.id.text_login_status);
+		loginDone = (ImageView) view.findViewById(R.id.ic_done_login);
+		connectDone = (ImageView) view.findViewById(R.id.ic_done_connect);
+		noDevice = (FrameLayout) view.findViewById(R.id.message_no_device);
+		foundDevice = (LinearLayout) view.findViewById(R.id.message_device_found);
+		deviceId = (TextView) view.findViewById(R.id.text_device_id);
 
-		inpUsername = (EditText) findViewById(R.id.text_input_username);
-		inpPassword = (EditText) findViewById(R.id.text_input_password);
-		btnLoginSubmit = (Button) findViewById(R.id.btn_login_submit);
-		loginSpinner = (ProgressBar) findViewById(R.id.prog_login_spinner);
-		loginStatus = (TextView) findViewById(R.id.text_login_status);
 
 		btnLoginSubmit.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -80,7 +67,6 @@ public class LoginConnectActivity extends Activity
 				btnLoginSubmit.setEnabled(false);
 				btnLoginSubmit.setVisibility(View.GONE);
 				loginSpinner.setVisibility(View.VISIBLE);
-
 				loginStatus.setText("Authorizing...");
 
 				final String username = inpUsername.getText().toString();
@@ -92,7 +78,6 @@ public class LoginConnectActivity extends Activity
 						String token = tok.getAsString();
 						if (token.length() > 0) {
 							Log.d(getString(R.string.log_tag), "Login accepted");
-
 							SharedPreferences.Editor editor = sp.edit();
 							editor.putString("authToken", token);
 							editor.putString("username", username);
@@ -117,7 +102,6 @@ public class LoginConnectActivity extends Activity
 
 		if (sp.getString("authToken", null) != null && sp.getString("username", null) != null) {
 			loginStatus.setText("Checking stored authorization...");
-
 			inpUsername.setEnabled(false);
 			inpPassword.setEnabled(false);
 			btnLoginSubmit.setEnabled(false);
@@ -147,69 +131,56 @@ public class LoginConnectActivity extends Activity
 					}
 				}
 			});
-
 			arf.execute("POST", "isValid", sp.getString("username", ""), sp.getString("authToken", ""));
 		}
-		final Intent service = new Intent(LoginConnectActivity.this, OpenBCIService.class);
-		service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
-		startService(service);
-
-		// TODO: remove
-
-		findViewById(R.id.message_no_device).setOnClickListener(new View.OnClickListener(){
-			@Override
-			public void onClick(View v){
-				onDevice("lol");
-			}
-		});
+		return view;
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause();
-		unregisterReceiver(mUsbReceiver);
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		// This makes sure that the container activity has implemented
+		// the callback interface. If not, it throws an exception
+		try {
+			mListener = (Listener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+				+ " must implement OnFragmentInteractionListener");
+		}
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		// OpenBCI connection receiver
-		final IntentFilter filter = new IntentFilter();
-		filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-		filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-		filter.setPriority(500);
-		registerReceiver(mUsbReceiver, filter);
-		Log.d(getString(R.string.log_tag), "Registered receiver");
-	}
-
-	private void onLogin(){
+	void onLogin(){
 		loginStatus.setText("Authorized.");
 
-		findViewById(R.id.ic_done_login).setVisibility(View.VISIBLE);
+		loginDone.setVisibility(View.VISIBLE);
 		loginStatus.requestFocus();
 		loginOk = true;
 		inpPassword.setText("");
 		loginSpinner.setVisibility(View.GONE);
-		checkForCompleteness();
+		checkForCompletion();
 	}
 
-	private void onDevice(String id){
-		// TODO: Anything
-		findViewById(R.id.ic_done_connect).setVisibility(View.VISIBLE);
-		findViewById(R.id.message_no_device).setVisibility(View.GONE);
-		findViewById(R.id.message_device_found).setVisibility(View.VISIBLE);
-		((TextView) (findViewById(R.id.text_device_id))).setText(id);
-		deviceOk = true;
-		checkForCompleteness();
+	void onDevice(boolean enabled) {
+		if (enabled) {
+			connectDone.setVisibility(View.VISIBLE);
+			noDevice.setVisibility(View.GONE);
+			deviceId.setText("OpenBCI connected");
+			foundDevice.setVisibility(View.VISIBLE);
+			deviceOk = true;
+			checkForCompletion();
+		} else {
+			connectDone.setVisibility(View.GONE);
+			noDevice.setVisibility(View.VISIBLE);
+			foundDevice.setVisibility(View.GONE);
+			deviceOk = false;
+		}
 	}
 
-	private void checkForCompleteness(){
+	private void checkForCompletion(){
 		if(loginOk && deviceOk){
 			Log.d(getString(R.string.log_tag), "Passing to MainActivity");
-			Intent intent = new Intent(this, MainActivity.class);
-			startActivity(intent);
-
-			finish();
+			mListener.home();
 		}
 	}
 }

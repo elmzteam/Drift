@@ -1,17 +1,11 @@
 package com.elmz.drift;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Outline;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
 
 import java.util.Iterator;
 import java.util.LinkedList;

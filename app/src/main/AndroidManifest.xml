@@ -21,10 +21,6 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".LoginConnectActivity"
-			android:label="Drift">
-		</activity>
-		<activity
 			android:name=".MainActivity"
 			android:label="@string/app_name">\
 		</activity>
