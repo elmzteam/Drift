@@ -72,8 +72,7 @@ public class DrowsinessView extends TextView{
 	}
 
 	public void setValue(int value){
-		this.value = value;
-		value = Math.min(Math.max(value, minimum), maximum);
+		this.value = Math.min(Math.max(value, minimum), maximum);
 		setText(Integer.toString(value));
 		invalidate();
 	}
