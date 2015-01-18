@@ -216,14 +216,14 @@
 							<TextView
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
-								android:text="34"
+								android:text="8"
 								style="@style/text_display2"
 								android:id="@+id/text_current_alpha"/>
 
 							<TextView
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
-								android:text="%"
+								android:text="dB"
 								android:gravity="bottom|end"
 								style="@style/text_display1_disabled"
 								android:layout_marginStart="4dp"/>

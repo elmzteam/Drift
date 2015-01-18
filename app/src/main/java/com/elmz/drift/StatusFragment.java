@@ -65,7 +65,6 @@ public class StatusFragment extends Fragment{
 
 	private void updateAlpha(double ampl){
 		alphaChart.pushData(ampl);
-		double val = (ampl - alphaChart.getMinimum())/(alphaChart.getMaximum() - alphaChart.getMinimum());
-		textAlpha.setText(Integer.toString((int)(val*100)));
+		textAlpha.setText(new DecimalFormat("#0").format(ampl));
 	}
 }

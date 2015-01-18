@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.hardware.usb.UsbManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,9 +28,12 @@ import com.elmz.drift.drawer.NavMenuItem;
 import com.elmz.drift.openbci.OpenBCIService;
 import com.google.gson.JsonElement;
 
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
-public class MainActivity extends AbstractDrawerActivity implements LoginFragment.Listener {
+public class MainActivity extends AbstractDrawerActivity implements LoginFragment.Listener{
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -39,10 +46,10 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 
 	private int tripId = -1;
 
-	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver(){
 		@Override
-		public void onReceive(Context context, Intent intent) {
-			switch (intent.getAction()) {
+		public void onReceive(Context context, Intent intent){
+			switch(intent.getAction()){
 				case UsbManager.ACTION_USB_ACCESSORY_ATTACHED:
 					break;
 				case UsbManager.ACTION_USB_DEVICE_DETACHED:
@@ -54,10 +61,10 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 	};
 
 	// Callback from OpenBCI service
-	private Handler serviceCallback = new Handler() {
+	private Handler serviceCallback = new Handler(){
 		@Override
-		public void handleMessage(Message msg) {
-			switch(mPosition) {
+		public void handleMessage(Message msg){
+			switch(mPosition){
 				case -1: // Login view
 					mLoginFragment.onDevice(msg.arg1 == 1);
 					break;
@@ -86,37 +93,37 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 	}
 
 	@Override
-	public void home() {
+	public void home(){
 		switchView(0);
 	}
 
 	@Override
-	public NavDrawerActivityConfig getNavDrawerConfiguration() {
+	public NavDrawerActivityConfig getNavDrawerConfiguration(){
 		final NavDrawerAdapter adapter = new NavDrawerAdapter(this, R.layout.nav_item);
 		adapter.setItems(new NavMenuBuilder()
-				.addItem(NavMenuItem.create(0, "Status", R.drawable.ic_done))
-				.addItem(NavMenuItem.create(1, "History", R.drawable.ic_done))
-				.addSeparator()
-				.addItem(NavMenuItem.createButton(2, "Settings", R.drawable.ic_settings_black_24dp))
-				.addItem(NavMenuItem.createButton(3, "Logout", R.drawable.ic_exit_to_app_black_24dp))
-				.build());
+			.addItem(NavMenuItem.create(0, "Status", R.drawable.ic_done))
+			.addItem(NavMenuItem.create(1, "History", R.drawable.ic_done))
+			.addSeparator()
+			.addItem(NavMenuItem.createButton(2, "Settings", R.drawable.ic_settings_black_24dp))
+			.addItem(NavMenuItem.createButton(3, "Logout", R.drawable.ic_exit_to_app_black_24dp))
+			.build());
 
 		return new NavDrawerActivityConfig.Builder()
-				.mainLayout(R.layout.drawer_layout)
-				.drawerLayoutId(R.id.drawer_layout)
-				.drawerContainerId(R.id.drawer_container)
-				.leftDrawerId(R.id.drawer)
-				.checkedPosition(0)
-				.drawerShadow(R.drawable.drawer_shadow)
-				.drawerOpenDesc(R.string.action_drawer_open)
-				.drawerCloseDesc(R.string.action_drawer_close)
-				.adapter(adapter)
-				.build();
+			.mainLayout(R.layout.drawer_layout)
+			.drawerLayoutId(R.id.drawer_layout)
+			.drawerContainerId(R.id.drawer_container)
+			.leftDrawerId(R.id.drawer)
+			.checkedPosition(0)
+			.drawerShadow(R.drawable.drawer_shadow)
+			.drawerOpenDesc(R.string.action_drawer_open)
+			.drawerCloseDesc(R.string.action_drawer_close)
+			.adapter(adapter)
+			.build();
 	}
 
 	@Override
-	public void onNavItemSelected(int id) {
-		switch (id) {
+	public void onNavItemSelected(int id){
+		switch(id){
 			case 0:
 			case 1:
 				switchView(id);
@@ -124,21 +131,27 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 			case 2:
 				break;
 			case 3:
-
+				SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+				SharedPreferences.Editor editor = sp.edit();
+				editor.remove("authToken");
+				editor.remove("username");
+				editor.commit();
+				mLoginFragment = new LoginFragment();
+				switchView(-1);
 				break;
 		}
 	}
 
-	public void switchView(int viewId) {
-		if (mPosition == -1) {
+	public void switchView(int viewId){
+		if(mPosition == -1){
 			super.getDrawerToggle().setDrawerIndicatorEnabled(true);
 			deviceEnabled = true;
 			invalidateOptionsMenu();
 		}
 		mPosition = viewId;
-		switch(viewId) {
+		switch(viewId){
 			case -1: // Login
-				if (mLoginFragment == null) {
+				if(mLoginFragment == null){
 					mLoginFragment = new LoginFragment();
 				}
 				getFragmentManager().beginTransaction().replace(R.id.container, mLoginFragment).commit();
@@ -146,24 +159,26 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 				invalidateOptionsMenu();
 				break;
 			case 0: // Status
-				if (mStatusFragment == null) {
+				if(mStatusFragment == null){
 					mStatusFragment = new StatusFragment();
 				}
 				getFragmentManager().beginTransaction().replace(R.id.container, mStatusFragment).commit();
 				break;
 			case 1: // History
-				if (mHistoryFragment == null) {
+				if(mHistoryFragment == null){
 					mHistoryFragment = new HistoryFragment();
 				}
 				getFragmentManager().beginTransaction().replace(R.id.container, mHistoryFragment).commit();
 				break;
 			case 2: // Settings
 				break;
+			case 3: // Logout
+				break;
 		}
 	}
 
 	@Override
-	public void onResume() {
+	public void onResume(){
 		super.onResume();
 		// OpenBCI connection receiver
 		final IntentFilter filter = new IntentFilter();
@@ -175,16 +190,16 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 	}
 
 	@Override
-	public void onPause() {
+	public void onPause(){
 		super.onPause();
 		unregisterReceiver(mUsbReceiver);
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if (mPosition != -1) {
+	public boolean onCreateOptionsMenu(Menu menu){
+		if(mPosition != -1){
 			getMenuInflater().inflate(R.menu.main, menu);
-			if (deviceEnabled) {
+			if(deviceEnabled){
 				menu.findItem(R.id.action_toggle).setIcon(R.drawable.ic_pause_circle_fill_white_48dp);
 			} else {
 				menu.findItem(R.id.action_toggle).setIcon(R.drawable.ic_play_circle_fill_white_48dp);
@@ -200,8 +215,8 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		if(id == R.id.action_toggle) {
-			if (deviceEnabled) {
+		if(id == R.id.action_toggle){
+			if(deviceEnabled){
 				item.setIcon(R.drawable.ic_pause_circle_fill_white_48dp);
 				stopService(new Intent(this, OpenBCIService.class));
 				endDrive();
@@ -211,7 +226,7 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 			}
 			final Intent service = new Intent(this, OpenBCIService.class);
 			service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
-			if (startService(service) != null) {
+			if(startService(service) != null){
 				stopService(service);
 			}
 			deviceEnabled = !deviceEnabled;
@@ -224,7 +239,7 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 	public void startDrive(){
 		Log.d(getString(R.string.log_tag), "starting drive");
 
-		final String startLoc = "Herndon, VA"; // TODO
+		final String startLoc = getCityName();
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.SECOND, 0);
@@ -261,7 +276,7 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 	public void endDrive(){
 		Log.d(getString(R.string.log_tag), "ending drive");
 
-		final String endLoc = "Alexandria, VA"; // TODO
+		final String endLoc = getCityName();
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.SECOND, 0);
@@ -284,5 +299,26 @@ public class MainActivity extends AbstractDrawerActivity implements LoginFragmen
 		});
 
 		arf.execute("POST", "setEnd", username, authToken, Integer.toString(sp.getInt("tripId", -1)), Long.toString(endTime), endLoc, Integer.toString(drowsinessScore));
+	}
+
+	private String getCityName(){
+		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		double longitude = location.getLongitude();
+		double latitude = location.getLatitude();
+
+		String cityName = "Not Found";
+		Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+		try{
+			List<Address> addresses = gcd.getFromLocation(latitude, longitude, 1);
+			if(addresses.size() > 0){
+				cityName = addresses.get(0).getLocality();
+				// you should also try with addresses.get(0).toSring();
+				System.out.println(cityName);
+			}
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+		return cityName;
 	}
 }
