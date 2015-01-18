@@ -114,12 +114,24 @@ public class LoginConnectActivity extends Activity{
 			APIRequestFragment arf = new APIRequestFragment(new ICallback(){
 				@Override
 				public void callback(JsonElement arg){
-					String status = arg.getAsString();
-					Log.d(getString(R.string.log_tag), "Auth validation: " + status);
-					if(status.equals("true")){
-						onLogin();
-					} else {
-						loginStatus.setText("Invalid stored authorization.");
+					try{
+						String status = arg.getAsString();
+						Log.d(getString(R.string.log_tag), "Auth validation: " + status);
+						if(status.equals("true")){
+							onLogin();
+						} else {
+							loginStatus.setText("Invalid stored authorization.");
+
+							inpUsername.setEnabled(true);
+							inpPassword.setEnabled(true);
+							btnLoginSubmit.setEnabled(true);
+							btnLoginSubmit.setVisibility(View.VISIBLE);
+							loginSpinner.setVisibility(View.GONE);
+						}
+					} catch(Exception e){
+						Log.e(getString(R.string.log_tag), "server down");
+
+						loginStatus.setText("Unable to communicate with server.");
 
 						inpUsername.setEnabled(true);
 						inpPassword.setEnabled(true);

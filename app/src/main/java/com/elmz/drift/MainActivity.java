@@ -66,17 +66,18 @@ public class MainActivity extends Activity
 		}
 
 		fragmentManager.beginTransaction().replace(R.id.container, frag).commit();
+		onSectionAttached(position);
 	}
 
-	public void onSectionAttached(int number){
-		switch(number){
-			case 1:
+	public void onSectionAttached(int position){
+		switch(position){
+			case 0:
 				mTitle = getString(R.string.title_section1);
 				break;
-			case 2:
+			case 1:
 				mTitle = getString(R.string.title_section2);
 				break;
-			case 3:
+			case 2:
 				mTitle = getString(R.string.title_section3);
 				break;
 		}
@@ -153,8 +154,6 @@ public class MainActivity extends Activity
 		@Override
 		public void onAttach(Activity activity){
 			super.onAttach(activity);
-			((MainActivity) activity).onSectionAttached(
-				getArguments().getInt(ARG_SECTION_NUMBER));
 		}
 	}
 

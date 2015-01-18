@@ -87,13 +87,13 @@ public class DrowsinessView extends TextView{
 
 		Paint pnt = new Paint();
 
+		pnt.setColor(getResources().getColor(R.color.ok));
+
+		canvas.drawOval(0, 0, size, size, pnt);
+
 		pnt.setColor(getResources().getColor(R.color.warning));
 
 		canvas.drawArc(0, 0, size, size, 0, theta, true, pnt);
-
-		pnt.setColor(getResources().getColor(R.color.ok));
-
-		canvas.drawArc(0, 0, size, size, theta, 360-theta, true, pnt);
 
 		pnt.setColor(getResources().getColor(R.color.white));
 
