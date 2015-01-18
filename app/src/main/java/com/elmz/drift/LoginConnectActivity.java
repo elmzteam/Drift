@@ -153,6 +153,15 @@ public class LoginConnectActivity extends Activity
 		final Intent service = new Intent(LoginConnectActivity.this, OpenBCIService.class);
 		service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
 		startService(service);
+
+		// TODO: remove
+
+		findViewById(R.id.message_no_device).setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v){
+				onDevice("lol");
+			}
+		});
 	}
 
 	@Override

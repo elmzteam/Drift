@@ -4,22 +4,12 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.elmz.drift.adapters.HistoryAdapter;
-import com.elmz.drift.items.Drive;
-import com.google.gson.JsonElement;
-
 import java.text.DecimalFormat;
-import java.util.Calendar;
 
 public class StatusFragment extends Fragment{
 	public static StatusFragment newInstance(){
@@ -31,8 +21,8 @@ public class StatusFragment extends Fragment{
 	private TextView textBlinkLength;
 	private double blinkRate;
 	private double blinkLength;
-
-	private Thread updater;
+	private ChartView alphaChart;
+	private TextView textAlpha;
 
 	public StatusFragment(){
 		super();
@@ -49,35 +39,10 @@ public class StatusFragment extends Fragment{
 		drowsinessView = (DrowsinessView) view.findViewById(R.id.drowsiness_view);
 		textBlinkLength = (TextView) view.findViewById(R.id.text_blink_length);
 		textBlinkRate = (TextView) view.findViewById(R.id.text_blink_rate);
+		alphaChart = (ChartView) view.findViewById(R.id.chart_alpha);
+		textAlpha = (TextView) view.findViewById(R.id.text_current_alpha);
 
-		blinkRate = 15;
-		blinkLength = .2;
 		drowsinessView.setValue(50);
-
-		final Handler handler = new Handler();
-
-		updater = new Thread(new Runnable(){
-			@Override
-			public void run(){
-				while(true){
-					try{
-						Thread.sleep(100);
-						handler.post(new Runnable(){
-							@Override
-							public void run(){
-								Log.d(getString(R.string.log_tag), "updating");
-								updateFatigueIndex(drowsinessView.getValue()+(int)Math.round(Math.random()*1.2-.6));
-								updateBlinkRate(Math.random()/10-.05);
-								updateBlinkLength(Math.random()/25-.02);
-							}
-						});
-					} catch(Exception e){
-
-					}
-				}
-			}
-		});
-		updater.start();
 
 		return view;
 	}
@@ -96,8 +61,9 @@ public class StatusFragment extends Fragment{
 		textBlinkLength.setText(new DecimalFormat("#0.00").format(blinkLength));
 	}
 
-	@Override
-	public void onStop(){
-		updater.stop();
+	private void updateAlpha(double ampl){
+		alphaChart.pushData(ampl);
+		double val = (ampl - alphaChart.getMinimum())/(alphaChart.getMaximum() - alphaChart.getMinimum());
+		textAlpha.setText(Integer.toString((int)(val*100)));
 	}
 }
