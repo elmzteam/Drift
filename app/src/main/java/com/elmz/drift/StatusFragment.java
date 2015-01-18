@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.elmz.drift.openbci.AlphaDetector;
 
 import java.text.DecimalFormat;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class StatusFragment extends Fragment{
 	public static StatusFragment newInstance(Listener l){
@@ -21,6 +23,8 @@ public class StatusFragment extends Fragment{
 	private DrowsinessView drowsinessView;
 	private TextView textBlinkRate;
 	private TextView textBlinkLength;
+    private long blinkTimeRange = 15000;
+    private Queue<Long> blinks = new LinkedList<Long>();
     private boolean blinkLengthBufferFilled = false;
     private int indexCycler = 0;
     private double[] blinkLengthBuffer = {0,0,0,0,0};
@@ -68,7 +72,8 @@ public class StatusFragment extends Fragment{
         if (getUpdate) {
             switch(dataformat) {
                 case 1:
-
+                    blinks.add(System.currentTimeMillis());
+                    updateBlinkLength();
                     break;
                 case 2:
                     double blink = (double)data;
@@ -88,8 +93,11 @@ public class StatusFragment extends Fragment{
 		drowsinessView.setValue(drowsinessView.getValue() + val);
 	}
 
-	private void updateBlinkRate(double rate){
-		currentBlinkRate += rate;
+	private void updateBlinkRate(){
+        while (System.currentTimeMillis() - blinks.peek() > blinkTimeRange) {
+            blinks.poll();
+        }
+		currentBlinkRate = blinks.size() / (blinkTimeRange / 1000d);
 		textBlinkRate.setText(new DecimalFormat("#0.0").format(currentBlinkRate));
 	}
 

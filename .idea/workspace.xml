@@ -40,13 +40,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a39e5080-038b-4169-88fb-0bb06b4cef0a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/openbci/AlphaDetector.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/openbci/BrainStateCallback.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/openbci/StreamReader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/openbci/OpenBCIService.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/openbci/OpenBCIService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/StatusFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/StatusFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Drift.iws" />
@@ -86,7 +80,7 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.6153846" vertical-offset="3652" max-vertical-offset="4845">
+            <state vertical-scroll-proportion="-7.8076925" vertical-offset="3517" max-vertical-offset="4845">
               <caret line="254" column="0" selection-start-line="254" selection-start-column="0" selection-end-line="254" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -97,10 +91,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OpenBCIService.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="OpenBCIService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/openbci/OpenBCIService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.51" vertical-offset="1095" max-vertical-offset="5925">
+            <state vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="5925">
               <caret line="104" column="23" selection-start-line="104" selection-start-column="23" selection-end-line="104" selection-end-column="23" />
               <folding>
                 <element signature="e#1447#1448#0" expanded="true" />
@@ -131,15 +125,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StatusFragment.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="StatusFragment.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/StatusFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1635">
-              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.43" vertical-offset="1075" max-vertical-offset="1725">
+              <caret line="99" column="40" selection-start-line="99" selection-start-column="40" selection-end-line="99" selection-end-column="40" />
               <folding>
-                <element signature="e#458#459#0" expanded="true" />
-                <element signature="e#493#494#0" expanded="true" />
-                <element signature="e#1293#1332#0" expanded="true" />
+                <element signature="e#511#512#0" expanded="true" />
+                <element signature="e#546#547#0" expanded="true" />
+                <element signature="e#745#751#0" expanded="true" />
+                <element signature="e#1444#1483#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1245,9 +1240,9 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/HistoryFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/adapters/HistoryAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/LoginFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/StatusFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/openbci/OpenBCIService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/elmz/drift/StatusFragment.java" />
       </list>
     </option>
   </component>
@@ -1856,11 +1851,16 @@
       <created>1421456783619</created>
       <updated>1421456783619</updated>
     </task>
+    <task id="LOCAL-00001" summary="i l-IKE this commit bc live stream works">
+      <created>1421583111854</created>
+      <updated>1421583111854</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="1024" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
@@ -1881,7 +1881,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25201938" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25201938" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32903227" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="true" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1908,6 +1908,8 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="i l-IKE this commit bc live stream works" />
+    <option name="LAST_COMMIT_MESSAGE" value="i l-IKE this commit bc live stream works" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1942,9 +1944,10 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1620">
           <caret line="24" column="29" selection-start-line="24" selection-start-column="29" selection-end-line="25" selection-end-column="31" />
           <folding>
-            <element signature="e#458#459#0" expanded="true" />
-            <element signature="e#493#494#0" expanded="true" />
-            <element signature="e#1293#1332#0" expanded="true" />
+            <element signature="e#511#512#0" expanded="true" />
+            <element signature="e#546#547#0" expanded="true" />
+            <element signature="e#745#751#0" expanded="true" />
+            <element signature="e#1444#1483#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2320,33 +2323,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/StatusFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1635">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <element signature="e#458#459#0" expanded="true" />
-            <element signature="e#493#494#0" expanded="true" />
-            <element signature="e#1293#1332#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.6153846" vertical-offset="3652" max-vertical-offset="4845">
-          <caret line="254" column="0" selection-start-line="254" selection-start-column="0" selection-end-line="254" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3465#3466#0" expanded="true" />
-            <element signature="e#3485#3486#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/openbci/OpenBCIService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51" vertical-offset="1095" max-vertical-offset="5925">
+        <state vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="5925">
           <caret line="104" column="23" selection-start-line="104" selection-start-column="23" selection-end-line="104" selection-end-column="23" />
           <folding>
             <element signature="e#1447#1448#0" expanded="true" />
@@ -2359,6 +2338,31 @@
             <element signature="e#3529#3530#0" expanded="true" />
             <element signature="e#9675#9783#0" expanded="true" />
             <element signature="e#9778#9779#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.8076925" vertical-offset="3517" max-vertical-offset="4845">
+          <caret line="254" column="0" selection-start-line="254" selection-start-column="0" selection-end-line="254" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3465#3466#0" expanded="true" />
+            <element signature="e#3485#3486#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/elmz/drift/StatusFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.43" vertical-offset="1075" max-vertical-offset="1725">
+          <caret line="99" column="40" selection-start-line="99" selection-start-column="40" selection-end-line="99" selection-end-column="40" />
+          <folding>
+            <element signature="e#511#512#0" expanded="true" />
+            <element signature="e#546#547#0" expanded="true" />
+            <element signature="e#745#751#0" expanded="true" />
+            <element signature="e#1444#1483#0" expanded="true" />
           </folding>
         </state>
       </provider>
