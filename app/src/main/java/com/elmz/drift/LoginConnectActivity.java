@@ -39,10 +39,10 @@ public class LoginConnectActivity extends Activity
 		public void onReceive(Context context, Intent intent) {
 			switch (intent.getAction()) {
 				case UsbManager.ACTION_USB_ACCESSORY_ATTACHED:
-					final Intent service = new Intent(LoginConnectActivity.this, OpenBCIService.class);
-					service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
-					startService(service);
-					Log.d(getString(R.string.log_tag), "Service started");
+//					final Intent service = new Intent(LoginConnectActivity.this, OpenBCIService.class);
+//					service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
+//					startService(service);
+//					Log.d(getString(R.string.log_tag), "Service started");
 					break;
 				case UsbManager.ACTION_USB_DEVICE_DETACHED:
 					stopService(new Intent(LoginConnectActivity.this, OpenBCIService.class));
@@ -115,7 +115,7 @@ public class LoginConnectActivity extends Activity
 			}
 		});
 
-		if (sp.getString("authToken", "").length() > 0 && sp.getString("username", "").length() > 0) {
+		if (sp.getString("authToken", null) != null && sp.getString("username", null) != null) {
 			loginStatus.setText("Checking stored authorization...");
 
 			inpUsername.setEnabled(false);
@@ -123,6 +123,7 @@ public class LoginConnectActivity extends Activity
 			btnLoginSubmit.setEnabled(false);
 			btnLoginSubmit.setVisibility(View.GONE);
 			loginSpinner.setVisibility(View.VISIBLE);
+			inpUsername.setText(sp.getString("username", ""));
 
 			APIRequestFragment arf = new APIRequestFragment(new ICallback() {
 				@Override
@@ -150,6 +151,9 @@ public class LoginConnectActivity extends Activity
 
 			arf.execute("POST", "isValid", sp.getString("username", ""), sp.getString("authToken", ""));
 		}
+		final Intent service = new Intent(LoginConnectActivity.this, OpenBCIService.class);
+		service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
+		startService(service);
 	}
 
 	@Override
@@ -176,6 +180,7 @@ public class LoginConnectActivity extends Activity
 		findViewById(R.id.ic_done_login).setVisibility(View.VISIBLE);
 		loginStatus.requestFocus();
 		loginOk = true;
+		inpPassword.setText("");
 		loginSpinner.setVisibility(View.GONE);
 		checkForCompleteness();
 	}

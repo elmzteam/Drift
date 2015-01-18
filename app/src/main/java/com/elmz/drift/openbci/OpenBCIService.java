@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -159,8 +160,9 @@ public class OpenBCIService extends Service
 	}
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(TAG, "Starting OpenBCI service");
+	public void onCreate() {
+		super.onCreate();
+		Log.d(TAG, "Creating service");
 		try {
 			sManager = D2xxManager.getInstance(this);
 		} catch (D2xxManager.D2xxException e) {
@@ -169,9 +171,16 @@ public class OpenBCIService extends Service
 		if(!sManager.setVIDPID(0x0403, 0xada1)) {
 			Log.d(TAG, "setVIDPID Error");
 		}
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		super.onStartCommand(intent, flags, startId);
+		Log.d(TAG, "Starting OpenBCI service");
 		if (intent.getExtras() != null) {
 			mMessenger = (Messenger) intent.getExtras().get(TAG);
 		}
+		connectDevice();
 
 		// If we get killed, after returning from here, restart
 		return START_STICKY;
@@ -188,10 +197,6 @@ public class OpenBCIService extends Service
 		writeToDevice(OpenBCICommands.STOP_STREAM);
 		disconnectDevice();
 		Log.d(TAG, "Stopping OpenBCI service");
-	}
-
-	public boolean isReady() {
-		return mReadThread != null && !mReadThread.isInterrupted();
 	}
 
 	void configDevice() {
@@ -222,7 +227,17 @@ public class OpenBCIService extends Service
 
 	void connectDevice() {
 		if (mDevice == null) {
-			mDevice = sManager.openByIndex(this, 0);
+			if (sManager.createDeviceInfoList(this) > 0) {
+				mDevice = sManager.openByIndex(this, 0);
+			} else {
+				// try again in a few seconds
+				new Handler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						connectDevice();
+					}
+				}, 3000);
+			}
 		} else if (mDevice.isOpen()) {
 			Log.d(TAG, "Device already open");
 			return;
@@ -246,7 +261,9 @@ public class OpenBCIService extends Service
 	}
 
 	void disconnectDevice() {
-		mReadThread.interrupt();
+		if (mReadThread != null) {
+			mReadThread.interrupt();
+		}
 		try {
 			Thread.sleep(50);
 		}
