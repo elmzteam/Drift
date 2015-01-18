@@ -1,8 +1,5 @@
 package com.elmz.drift;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,31 +11,27 @@ import android.os.Message;
 import android.os.Messenger;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
+import com.elmz.drift.drawer.AbstractDrawerActivity;
+import com.elmz.drift.drawer.NavDrawerActivityConfig;
+import com.elmz.drift.drawer.NavDrawerAdapter;
+import com.elmz.drift.drawer.NavMenuBuilder;
+import com.elmz.drift.drawer.NavMenuItem;
 import com.elmz.drift.openbci.OpenBCIService;
 
-public class MainActivity extends Activity
-	implements NavigationDrawerFragment.NavigationDrawerCallbacks, LoginFragment.Listener {
+public class MainActivity extends AbstractDrawerActivity implements LoginFragment.Listener {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
 	 */
-	private NavigationDrawerFragment mNavigationDrawerFragment;
 	private boolean deviceEnabled = false;
 	private int mPosition;
 	private LoginFragment mLoginFragment;
 	private StatusFragment mStatusFragment;
 	private HistoryFragment mHistoryFragment;
-
-	/**
-	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-	 */
-	private CharSequence mTitle;
 
 	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
 		@Override
@@ -54,6 +47,7 @@ public class MainActivity extends Activity
 		}
 	};
 
+	// Callback from OpenBCI service
 	private Handler serviceCallback = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -76,16 +70,7 @@ public class MainActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_activity);
 
-		mNavigationDrawerFragment = (NavigationDrawerFragment)
-			getFragmentManager().findFragmentById(R.id.navigation_drawer);
-		mTitle = getTitle();
-
-		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(
-			R.id.navigation_drawer,
-			(DrawerLayout) findViewById(R.id.drawer_layout));
 		// Start service
 		final Intent service = new Intent(this, OpenBCIService.class);
 		service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
@@ -95,17 +80,55 @@ public class MainActivity extends Activity
 	}
 
 	@Override
-	public void onNavigationDrawerItemSelected(int position){
-		// update the main content by replacing fragments
-		switchView(position);
-	}
-
-	@Override
 	public void home() {
 		switchView(0);
 	}
 
+	@Override
+	public NavDrawerActivityConfig getNavDrawerConfiguration() {
+		final NavDrawerAdapter adapter = new NavDrawerAdapter(this, R.layout.nav_item);
+		adapter.setItems(new NavMenuBuilder()
+				.addItem(NavMenuItem.create(0, "Status", R.drawable.ic_done))
+				.addItem(NavMenuItem.create(1, "History", R.drawable.ic_done))
+				.addSeparator()
+				.addItem(NavMenuItem.createButton(2, "Settings", R.drawable.ic_settings_black_24dp))
+				.addItem(NavMenuItem.createButton(3, "Logout", R.drawable.ic_exit_to_app_black_24dp))
+				.build());
+
+		return new NavDrawerActivityConfig.Builder()
+				.mainLayout(R.layout.drawer_layout)
+				.drawerLayoutId(R.id.drawer_layout)
+				.drawerContainerId(R.id.drawer_container)
+				.leftDrawerId(R.id.drawer)
+				.checkedPosition(0)
+				.drawerShadow(R.drawable.drawer_shadow)
+				.drawerOpenDesc(R.string.action_drawer_open)
+				.drawerCloseDesc(R.string.action_drawer_close)
+				.adapter(adapter)
+				.build();
+	}
+
+	@Override
+	public void onNavItemSelected(int id) {
+		switch (id) {
+			case 0:
+			case 1:
+				switchView(id);
+				break;
+			case 2:
+				break;
+			case 3:
+
+				break;
+		}
+	}
+
 	public void switchView(int viewId) {
+		if (mPosition == -1) {
+			super.getDrawerToggle().setDrawerIndicatorEnabled(true);
+			deviceEnabled = true;
+			invalidateOptionsMenu();
+		}
 		mPosition = viewId;
 		switch(viewId) {
 			case -1: // Login
@@ -113,6 +136,8 @@ public class MainActivity extends Activity
 					mLoginFragment = new LoginFragment();
 				}
 				getFragmentManager().beginTransaction().replace(R.id.container, mLoginFragment).commit();
+				super.getDrawerToggle().setDrawerIndicatorEnabled(false);
+				invalidateOptionsMenu();
 				break;
 			case 0: // Status
 				if (mStatusFragment == null) {
@@ -149,41 +174,17 @@ public class MainActivity extends Activity
 		unregisterReceiver(mUsbReceiver);
 	}
 
-	public void onSectionAttached(int number){
-		switch(number){
-			case -1:
-				mTitle = getString(R.string.title_login);
-			case 1:
-				mTitle = getString(R.string.title_status);
-				break;
-			case 2:
-				mTitle = getString(R.string.title_history);
-				break;
-			case 3:
-				mTitle = getString(R.string.title_settings);
-				break;
-		}
-	}
-
-	public void restoreActionBar(){
-		ActionBar actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setTitle(mTitle);
-	}
-
-
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu){
-		if(!mNavigationDrawerFragment.isDrawerOpen()){
-			// Only show items in the action bar relevant to this screen
-			// if the drawer is not showing. Otherwise, let the drawer
-			// decide what to show in the action bar.
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (mPosition != -1) {
 			getMenuInflater().inflate(R.menu.main, menu);
-			restoreActionBar();
-			return true;
+			if (deviceEnabled) {
+				menu.findItem(R.id.action_toggle).setIcon(R.drawable.ic_pause_circle_fill_white_48dp);
+			} else {
+				menu.findItem(R.id.action_toggle).setIcon(R.drawable.ic_play_circle_fill_white_48dp);
+			}
 		}
-		return super.onCreateOptionsMenu(menu);
+		return true;
 	}
 
 	@Override
@@ -193,14 +194,17 @@ public class MainActivity extends Activity
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		//noinspection SimplifiableIfStatement
-		if(id == R.id.action_toggle){
+		if(id == R.id.action_toggle) {
 			if (deviceEnabled) {
-				stopService(new Intent(MainActivity.this, OpenBCIService.class));
+				item.setIcon(R.drawable.ic_pause_circle_fill_white_48dp);
+				stopService(new Intent(this, OpenBCIService.class));
 			} else {
-				final Intent service = new Intent(this, OpenBCIService.class);
-				service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
-				startService(service);
+				item.setIcon(R.drawable.ic_play_circle_fill_white_48dp);
+			}
+			final Intent service = new Intent(this, OpenBCIService.class);
+			service.putExtra(OpenBCIService.TAG, new Messenger(serviceCallback));
+			if (startService(service) != null) {
+				stopService(service);
 			}
 			deviceEnabled = !deviceEnabled;
 			return true;
@@ -208,45 +212,4 @@ public class MainActivity extends Activity
 
 		return super.onOptionsItemSelected(item);
 	}
-
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment{
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		private static final String ARG_SECTION_NUMBER = "section_number";
-
-		/**
-		 * Returns a new instance of this fragment for the given section
-		 * number.
-		 */
-		public static PlaceholderFragment newInstance(int sectionNumber){
-			PlaceholderFragment fragment = new PlaceholderFragment();
-			Bundle args = new Bundle();
-			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-			fragment.setArguments(args);
-			return fragment;
-		}
-
-		public PlaceholderFragment(){
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-														 Bundle savedInstanceState){
-			View rootView = inflater.inflate(R.layout.fragment_layout, container, false);
-			return rootView;
-		}
-
-		@Override
-		public void onAttach(Activity activity){
-			super.onAttach(activity);
-			((MainActivity) activity).onSectionAttached(
-					getArguments().getInt(ARG_SECTION_NUMBER));
-		}
-	}
-
 }

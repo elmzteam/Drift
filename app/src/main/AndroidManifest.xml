@@ -14,7 +14,8 @@
 		<activity
 			android:name=".SplashActivity"
 			android:theme="@style/NoAppBarTheme"
-			android:label="Drift">
+			android:label="Drift"
+			android:configChanges="orientation|screenSize">
 			<intent-filter>
 				<category android:name="android.intent.category.LAUNCHER"/>
 				<action android:name="android.intent.action.MAIN"/>
@@ -22,7 +23,8 @@
 		</activity>
 		<activity
 			android:name=".MainActivity"
-			android:label="@string/app_name">\
+			android:label="@string/app_name"
+			android:configChanges="orientation|screenSize">
 		</activity>
 	</application>
 

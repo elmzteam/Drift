@@ -243,7 +243,7 @@ public class OpenBCIService extends Service
 		}
 
 		if (mDevice == null) {
-			Log.e(TAG, "Cannot connect to OpenBCI: device is null");
+			Log.d(TAG, "OpenBCI not found");
 		} else if (mDevice.isOpen()) {
 			configDevice();
 			if (mReadThread == null || !mReadThread.isInterrupted()) {
