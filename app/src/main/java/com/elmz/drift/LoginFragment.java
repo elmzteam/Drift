@@ -74,15 +74,7 @@ public class LoginFragment extends Fragment
 				APIRequestFragment arf = new APIRequestFragment(new ICallback() {
 					@Override
 					public void callback(JsonElement tok) {
-						String token = tok.getAsString();
-						if (token.length() > 0) {
-							Log.d(getString(R.string.log_tag), "Login accepted");
-							SharedPreferences.Editor editor = sp.edit();
-							editor.putString("authToken", token);
-							editor.putString("username", username);
-							editor.commit();
-							onLogin();
-						} else {
+						if(tok.isJsonNull() || tok.getAsString().length() == 0){
 							Log.d(getString(R.string.log_tag), "Login rejected");
 							loginStatus.setText("Invalid username or password.");
 
@@ -91,6 +83,13 @@ public class LoginFragment extends Fragment
 							btnLoginSubmit.setEnabled(true);
 							btnLoginSubmit.setVisibility(View.VISIBLE);
 							loginSpinner.setVisibility(View.GONE);
+						} else {
+							Log.d(getString(R.string.log_tag), "Login accepted");
+							SharedPreferences.Editor editor = sp.edit();
+							editor.putString("authToken", tok.getAsString());
+							editor.putString("username", username);
+							editor.commit();
+							onLogin();
 						}
 					}
 				});
