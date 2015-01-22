@@ -109,7 +109,7 @@ public class StatusFragment extends Fragment{
 
 	private void updateFatigueIndex() {
         int val = (int)Math.floor((1/(1 + Math.exp(-7 *((5 + currentAlpha)/15.0 - .5)))*0.60 + (currentBlinkLength >= .25 ? 1 :
-                0) + 0.1 + 1/(1 + Math.exp(-7 *((1 - 60/(2.0*currentBlinkRate)) - .5)))*0.3)*100);
+                0)*0.1 + 1/(1 + Math.exp(-7 *((1 - 60/(2.0*currentBlinkRate)) - .5)))*0.3)*100);
         Log.d("Fatigue", "" + val);
 		drowsinessView.setValue(val);
 	}
